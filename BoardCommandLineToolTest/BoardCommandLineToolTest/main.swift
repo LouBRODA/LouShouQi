@@ -1,11 +1,5 @@
-//
-//  main.swift
-//  BoardCommandLineToolTest
-//
-//  Created by etudiant on 10/01/2024.
-//
-
 import Foundation
+import Model
 
-print("Hello, World!")
-
+let jungleEmptyPiece: Cell = Cell(cellType: .jungle)
+let waterEmptyPiece: Cell = Cell(cellType: .water)

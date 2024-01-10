@@ -5,7 +5,7 @@ public struct Cell : CustomStringConvertible{
     
     ///Properties
     public var description: String{
-        return " \(piece?.description ?? "ø") on \(cellType), \(initialOwner.rawValue)"
+        return " \(piece?.description ?? "ø") on \(cellType), \(initialOwner.description)"
     }
     
     public let cellType: CellType
