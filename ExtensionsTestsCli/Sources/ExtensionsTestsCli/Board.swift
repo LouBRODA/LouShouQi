@@ -5,8 +5,9 @@ import Model
 extension Model.Board : CustomStringConvertible{
     public var description: String {
         var s = ""
-        for i in 0...grid.count{
-            for j in 0...grid[i].count{
+        for i in 0..<grid.count{
+            s += "\n"
+            for j in 0..<grid[i].count{
                 s += "\(grid[i][j].cellType.symbol)\(grid[i][j].piece?.animal.symbol ?? " ")\(grid[i][j].initialOwner.symbol)"
             }
         }

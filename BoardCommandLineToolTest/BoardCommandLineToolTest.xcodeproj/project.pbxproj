@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		EC3C36012B4E9B5000B1A80C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3C36002B4E9B5000B1A80C /* main.swift */; };
+		EC3C36092B4EAA0600B1A80C /* Model in Frameworks */ = {isa = PBXBuildFile; productRef = EC3C36082B4EAA0600B1A80C /* Model */; };
+		EC3C360B2B4EAA0B00B1A80C /* ExtensionsTestsCli in Frameworks */ = {isa = PBXBuildFile; productRef = EC3C360A2B4EAA0B00B1A80C /* ExtensionsTestsCli */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC3C36092B4EAA0600B1A80C /* Model in Frameworks */,
+				EC3C360B2B4EAA0B00B1A80C /* ExtensionsTestsCli in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,6 +47,7 @@
 			children = (
 				EC3C35FF2B4E9B5000B1A80C /* BoardCommandLineToolTest */,
 				EC3C35FE2B4E9B5000B1A80C /* Products */,
+				EC3C36072B4EAA0600B1A80C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +67,13 @@
 			path = BoardCommandLineToolTest;
 			sourceTree = "<group>";
 		};
+		EC3C36072B4EAA0600B1A80C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -78,6 +90,10 @@
 			dependencies = (
 			);
 			name = BoardCommandLineToolTest;
+			packageProductDependencies = (
+				EC3C36082B4EAA0600B1A80C /* Model */,
+				EC3C360A2B4EAA0B00B1A80C /* ExtensionsTestsCli */,
+			);
 			productName = BoardCommandLineToolTest;
 			productReference = EC3C35FD2B4E9B5000B1A80C /* BoardCommandLineToolTest */;
 			productType = "com.apple.product-type.tool";
@@ -285,6 +301,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EC3C36082B4EAA0600B1A80C /* Model */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Model;
+		};
+		EC3C360A2B4EAA0B00B1A80C /* ExtensionsTestsCli */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ExtensionsTestsCli;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EC3C35F52B4E9B5000B1A80C /* Project object */;
 }
