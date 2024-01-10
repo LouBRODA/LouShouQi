@@ -1,9 +1,9 @@
 import Foundation
 
-//Structure définissant une case du plateau de jeu
+///Structure définissant une case du plateau de jeu
 public struct Cell : CustomStringConvertible{
     
-    //Properties
+    ///Properties
     public var description: String{
         return " \(piece?.description ?? "ø") on \(cellType), \(initialOwner.rawValue)"
     }
