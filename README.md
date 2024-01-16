@@ -10,6 +10,7 @@ Sommaire
  1. [TP1](#tp1)
  2. [TP2](#tp2)
  3. [Auteur](#auteur)
+
 ---
 
 <div id='tp1'/>
@@ -37,9 +38,41 @@ s += "\(grid[i][j].cellType.symbol)\(grid[i][j].piece?.animal.symbol ?? " ")\(gr
 
 ---
 
+<div id='tp2'/>
+
+### Découvertes du TP2
+
+Pour continuer ce projet de Swift, j'ai pu mettre en place mes premières méthodes concrètes ainsi qu'un ensemble de tests (unitaires et de performance).  
+
+Ma première méthode développée a été la méthode permettant de compter le nombre de pièces d'un joueur sur le tableau de jeu. J'ai souhaité, pour mettre en place cette méthode, utiliser les méthodes d'extension sur les collections :   
+```
+public func countOnePlayerPieces(of player: Owner) -> Int{
+    return grid.flatMap { $0 }.filter { $0.piece?.owner == player }.count
+}
+```
+- Utilisation de `flatMap`, transformation d'un tableau bidimensionnel en un tableau unidimensionnel ([Documentation officielle](https://developer.apple.com/documentation/swift/sequence/flatmap(_:)-jo2y))  
+- Utilisation de `filter` pour garder les éléments remplissant une condition ([Documentation officielle](https://developer.apple.com/documentation/swift/string/filter(_:)))  
+- Utilisation de `count` pour compter le nombre d'éléments([Documentation officielle](https://developer.apple.com/documentation/swift/collection/count-4l4qk))  
+
+L'autre découverte principale que j'ai pu faire est l'écriture de tests de performance avec l'utilisation de la méthode `measure` permettant de connaître le temps passé pour exécuter une méthode :
+```
+func testInitPerformance() throws {
+    let gridSize = 1000
+    let cell = Cell(cellType: .jungle, initialOwner: .player1)
+    let grid = Array(repeating: Array(repeating: cell, count: gridSize), count: gridSize)
+
+    measure {
+        let _ = Board(withGrid: grid)
+    }
+}
+``` 
+- Utilisation de `measure` ([Documentation officielle](https://developer.apple.com/documentation/swift/continuousclock/measure(_:)))  
+
+---
+
 <div id='auteur'/>
 
-## Auteur :technologist:
+## Auteur :technologist: 
 
 Étudiant 3ème Annnée - Programmation Mobile - BUT Informatique - IUT Clermont Auvergne - 2023-2024   
 `BRODA Lou`
