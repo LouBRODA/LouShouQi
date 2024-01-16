@@ -8,7 +8,7 @@ extension Model.Board : CustomStringConvertible{
         for i in 0..<grid.count{
             s += "\n"
             for j in 0..<grid[i].count{
-                s += "\(grid[i][j].cellType.symbol)\(grid[i][j].piece?.animal.symbol ?? "   ")\(grid[i][j].initialOwner.symbol)     "
+                s += "\(grid[i][j].cellType.symbol)\(grid[i][j].piece?.animal.symbol ?? "   ")\(grid[i][j].piece?.owner.symbol ?? " ")     "
             }
         }
         return s

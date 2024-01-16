@@ -33,7 +33,7 @@ public struct Board{
     }
     
     ///Méthode pour insérer une pièce sur une cellule donnée
-    public func insertPiece(piece: Piece, atRow row: Int, andColumn column: Int) -> BoardResult{
+    public mutating func insertPiece(piece: Piece, atRow row: Int, andColumn column: Int) -> BoardResult{
         guard row >= 0 && row < nbRows && column >= 0 && column < nbColumns else {
             return .failed(reason: .outOfBounds)
         }
@@ -42,12 +42,12 @@ public struct Board{
             return .failed(reason: .cellNotEmpty)
         }
         
-        //grid[row][column].piece = piece
+        grid[row][column].piece = piece
         return .ok
     }
     
     ///Méthode pour supprimer une pièce sur une cellule donnée
-    public func removePiece(atRow row: Int, andColumn column: Int) -> BoardResult{
+    public mutating func removePiece(atRow row: Int, andColumn column: Int) -> BoardResult{
         guard row >= 0 && row < nbRows && column >= 0 && column < nbColumns else {
             return .failed(reason: .outOfBounds)
         }
@@ -56,7 +56,7 @@ public struct Board{
             return .failed(reason: .cellEmpty)
         }
         
-        //grid[row][column].piece = nil
+        grid[row][column].piece = nil
         return .ok
     }
 }

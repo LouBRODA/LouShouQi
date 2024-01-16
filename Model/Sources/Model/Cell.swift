@@ -10,7 +10,7 @@ public struct Cell : CustomStringConvertible{
     
     public let cellType: CellType
     public let initialOwner: Owner
-    public let piece : Piece?
+    public var piece : Piece?
     
     public init(cellType: CellType, initialOwner: Owner = .noOne, piece: Piece? = nil) {
         self.cellType = cellType

@@ -41,8 +41,8 @@ let lionJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: lionJ2.own
 let elephantJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: elephantJ1.owner, piece: elephantJ1)
 let elephantJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: elephantJ2.owner, piece: elephantJ2)
 
-let startingBoard: Board = Board(grid: [
-    [lionJ1StartingCell, jungleEmptyCell, trapEmptyCell, denEmptyCell, trapEmptyCell, jungleEmptyCell, lionJ1StartingCell],
+var startingBoard: Board = Board(withGrid: [
+    [lionJ1StartingCell, jungleEmptyCell, trapEmptyCell, denEmptyCell, trapEmptyCell, jungleEmptyCell, tigerJ1StartingCell],
     [jungleEmptyCell, dogJ1StartingCell, jungleEmptyCell, trapEmptyCell, jungleEmptyCell, catJ1StartingCell, jungleEmptyCell],
     [ratJ1StartingCell, jungleEmptyCell, leopardJ1StartingCell, jungleEmptyCell, wolfJ1StartingCell, jungleEmptyCell, elephantJ1StartingCell],
     [jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell],
@@ -51,8 +51,33 @@ let startingBoard: Board = Board(grid: [
     [jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell],
     [elephantJ2StartingCell, jungleEmptyCell, wolfJ2StartingCell, jungleEmptyCell, leopardJ2StartingCell, jungleEmptyCell, ratJ2StartingCell],
     [jungleEmptyCell, catJ2StartingCell, jungleEmptyCell, trapEmptyCell, jungleEmptyCell, dogJ2StartingCell, jungleEmptyCell],
-    [lionJ2StartingCell, jungleEmptyCell, trapEmptyCell, denEmptyCell, trapEmptyCell, jungleEmptyCell, lionJ2StartingCell]
+    [tigerJ2StartingCell, jungleEmptyCell, trapEmptyCell, denEmptyCell, trapEmptyCell, jungleEmptyCell, lionJ2StartingCell]
 ])!
 
 var test = startingBoard.description
 print(test)
+
+var countPiecesPlayerOne = startingBoard.countOnePlayerPieces(of: .player1)
+var countPiecesPlayerTwo = startingBoard.countOnePlayerPieces(of: .player2)
+var countPiecesTwoPlayers = startingBoard.countTwoPlayersPieces()
+
+print("Nombre du pièce du joueur 1 :")
+print(countPiecesPlayerOne)
+
+print("Nombre du pièce du joueur 2 :")
+print(countPiecesPlayerTwo)
+
+print("Nombre de pièces des deux joueurs :")
+print(countPiecesTwoPlayers)
+
+print("Board 2 : (suppression de la pièce du Lion du joueur 1)")
+let boardState2 = startingBoard.removePiece(atRow: 0, andColumn: 0)
+print(startingBoard.description)
+
+print("Nombre du pièce du joueur 1 :")
+countPiecesPlayerOne = startingBoard.countOnePlayerPieces(of: .player1)
+print(countPiecesPlayerOne)
+
+print("Board 3 : (ajout de la pièce du Lion du joueur 1)")
+let boardState3 = startingBoard.insertPiece(piece: lionJ1StartingCell.piece!, atRow: 1, andColumn: 0)
+print(startingBoard.description)
