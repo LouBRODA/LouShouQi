@@ -140,15 +140,26 @@ final class ModelTests: XCTestCase {
     
     ///Test pour l'initialiseur de Piece sous la forme Parameterized Unit Test
     func testParameterizedPieceInitializer() throws {
-        func expect(owner: Owner, animal: Animal) {
-            let piece = Piece(owner: owner, animal: animal)
-            XCTAssertEqual(owner, piece.owner)
-            XCTAssertEqual(animal, piece.animal)
+        func expect(expectedPiece: Piece, withOwner: Owner, andAnimal: Animal) {
+            let piece = Piece(owner: withOwner, animal: andAnimal)
+            XCTAssertEqual(expectedPiece.owner, piece.owner)
+            XCTAssertEqual(expectedPiece.animal, piece.animal)
         }
 
-        expect(owner: .player1, animal: .rat)
-        expect(owner: .player1, animal: .cat)
-        expect(owner: .player2, animal: .cat)
+        expect(expectedPiece: Piece(owner: .player1, animal: .cat), withOwner: .player1, andAnimal: .cat)
+        expect(expectedPiece: Piece(owner: .player2, animal: .lion), withOwner: .player2, andAnimal: .lion)
+    }
+    
+    ///Test pour l'ajout d'une Piece sous la forme Parameterized Unit Test
+    func testParameterized() throws {
+        func expect(expectedBoardResult: BoardResult, atRow: Int, andColumn: Int) {
+            let piece = Piece(owner: .player1, animal: .cat)
+            let boardResult = board.insertPiece(piece: piece, atRow: atRow, andColumn: andColumn)
+            XCTAssertEqual(expectedBoardResult, boardResult)
+        }
+
+        expect(expectedBoardResult: .ok, atRow: 1, andColumn: 1)
+        expect(expectedBoardResult: .failed(reason: BoardFailingReason.cellNotEmpty), atRow: 0, andColumn: 0)
     }
     
     
