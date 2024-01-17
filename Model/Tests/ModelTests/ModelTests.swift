@@ -7,14 +7,16 @@ final class ModelTests: XCTestCase {
 
     ///Fonction lancée avant chaque fonction de test
     override func setUpWithError() throws {
-        let cell = Cell(cellType: .jungle, initialOwner: .player1)
-        let validGrid = [[cell, cell], [cell, cell]]
+        let piece = Piece(owner: .player1, animal: .cat)
+        let cell = Cell(cellType: .jungle, initialOwner: .player1, piece: piece)
+        let cell2 = Cell(cellType: .jungle, initialOwner: .player1)
+        let validGrid = [[cell, cell], [cell, cell2]]
         board = Board(withGrid: validGrid)
     }
 
     ///Fonction lancée après chaque fonction de test
     override func tearDownWithError() throws {
-        board = nil
+        board = nil // useless
     }
 
     ///Test de l'initialisation du board avec une grille valide
@@ -38,10 +40,10 @@ final class ModelTests: XCTestCase {
     func testInsertPiece() throws {
         let piece = Piece(owner: .player1, animal: .cat)
         
-        let result = board.insertPiece(piece: piece, atRow: 0, andColumn: 0)
+        let result = board.insertPiece(piece: piece, atRow: 1, andColumn: 1)
         
         XCTAssertEqual(result, .ok)
-        XCTAssertEqual(board.grid[0][0].piece?.owner, .player1)
+        XCTAssertEqual(board.grid[1][1].piece?.owner, .player1)
     }
 
     ///Test de l'insertion non fonctionnelle d'une pièce hors du board
@@ -57,22 +59,15 @@ final class ModelTests: XCTestCase {
     ///Test de l'insertion non fonctionnelle d'une pièce dans une cellule du board non vide
     func testInsertPieceInNonEmptyCell() throws {
         let piece1 = Piece(owner: .player1, animal: .cat)
-        let piece2 = Piece(owner: .player2, animal: .cat)
-        
-        board.grid[0][0].piece = piece2
         
         let result = board.insertPiece(piece: piece1, atRow: 0, andColumn: 0)
         
         XCTAssertEqual(result, .failed(reason: .cellNotEmpty))
-        XCTAssertEqual(board.grid[0][0].piece?.owner, .player2)
+        XCTAssertEqual(board.grid[0][0].piece?.owner, .player1)
     }
 
     ///Test de la suppression fonctionnelle d'une pièce du board
     func testRemovePiece() throws {
-        let piece = Piece(owner: .player1, animal: .cat)
-        
-        board.grid[0][0].piece = piece
-        
         let result = board.removePiece(atRow: 0, andColumn: 0)
         
         XCTAssertEqual(result, .ok)
@@ -88,36 +83,24 @@ final class ModelTests: XCTestCase {
 
     ///Test de la suppression non fonctionnelle d'une pièce dans une cellule du board non vide
     func testRemovePieceFromEmptyCell() throws {
-        let result = board.removePiece(atRow: 0, andColumn: 0)
+        let result = board.removePiece(atRow: 1, andColumn: 1)
         
         XCTAssertEqual(result, .failed(reason: .cellEmpty))
     }
 
     ///Test du comptage fonctionnel du nombre de pièces d'un joueur dans le board
     func testCountOnePlayerPieces() throws {
-        let piece1 = Piece(owner: .player1, animal: .cat)
-        let piece2 = Piece(owner: .player1, animal: .dog)
-        
-        board.grid[0][0].piece = piece1
-        board.grid[0][1].piece = piece2
-        
         let count = board.countOnePlayerPieces(of: .player1)
         
-        XCTAssertEqual(count, 2)
+        XCTAssertEqual(count, 3)
     }
 
     ///Test du comptage fonctionnel du nombre de pièces des deux joueurs dans le board
     func testCountTwoPlayersPieces() throws {
-        let piece1 = Piece(owner: .player1, animal: .cat)
-        let piece2 = Piece(owner: .player2, animal: .cat)
-        
-        board.grid[0][0].piece = piece1
-        board.grid[1][1].piece = piece2
-        
         let count = board.countTwoPlayersPieces()
         
-        XCTAssertEqual(count.player1Pieces, 1)
-        XCTAssertEqual(count.player2Pieces, 1)
+        XCTAssertEqual(count.player1Pieces, 3)
+        XCTAssertEqual(count.player2Pieces, 0)
     }
 
     ///Test pour le cas unknown de l'enum BoardResult
@@ -153,6 +136,19 @@ final class ModelTests: XCTestCase {
         let piece = Piece(owner: .player1, animal: .cat)
 
         XCTAssertEqual(piece.description, "[1:cat]")
+    }
+    
+    ///Test pour l'initialiseur de Piece sous la forme Parameterized Unit Test
+    func testParameterizedPieceInitializer() throws {
+        func expect(owner: Owner, animal: Animal) {
+            let piece = Piece(owner: owner, animal: animal)
+            XCTAssertEqual(owner, piece.owner)
+            XCTAssertEqual(animal, piece.animal)
+        }
+
+        expect(owner: .player1, animal: .rat)
+        expect(owner: .player1, animal: .cat)
+        expect(owner: .player2, animal: .cat)
     }
     
     

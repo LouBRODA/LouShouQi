@@ -6,7 +6,7 @@ public struct Board{
     ///Properties
     public let nbRows: Int
     public let nbColumns: Int
-    public var grid: [[Cell]]
+    public private (set) var grid: [[Cell]]
     
     ///Initializer
     public init?(withGrid grid: [[Cell]]) {
