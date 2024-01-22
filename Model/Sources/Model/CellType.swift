@@ -1,6 +1,6 @@
 import Foundation
 
-//Enumeration répertoriant les différents types de case du plateau
+///Enumeration répertoriant les différents types de case du plateau
 public enum CellType{
     case unknown
     case jungle

@@ -1,6 +1,6 @@
 import Foundation
 
-//Enumeration répertoriant les différents animaux du jeu
+///Enumeration répertoriant les différents animaux du jeu
 public enum Animal{
     case rat
     case cat

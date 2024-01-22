@@ -11,11 +11,14 @@ let package = Package(
             name: "ExtensionsTestsCli",
             targets: ["ExtensionsTestsCli"]),
     ],
+    dependencies: [
+            .package(name: "Model", path: "../Model")],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "ExtensionsTestsCli"),
+            name: "ExtensionsTestsCli",
+            dependencies: ["Model"]),
         .testTarget(
             name: "ExtensionsTestsCliTests",
             dependencies: ["ExtensionsTestsCli"]),

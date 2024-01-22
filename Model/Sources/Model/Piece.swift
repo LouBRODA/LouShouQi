@@ -1,9 +1,9 @@
 import Foundation
 
-//Structure définissant une pièce du jeu
+///Structure définissant une pièce du jeu
 public struct Piece : CustomStringConvertible{
     
-    //Properties
+    ///Properties
     public var description: String { "[\(owner):\(animal)]" }
     
     public let owner: Owner

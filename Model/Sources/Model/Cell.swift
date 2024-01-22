@@ -1,16 +1,16 @@
 import Foundation
 
-//Structure définissant une case du plateau de jeu
+///Structure définissant une case du plateau de jeu
 public struct Cell : CustomStringConvertible{
     
-    //Properties
+    ///Properties
     public var description: String{
-        return " \(piece?.description ?? "ø") on \(cellType), \(initialOwner.rawValue)"
+        return " \(piece?.description ?? "ø") on \(cellType), \(initialOwner.description)"
     }
     
     public let cellType: CellType
     public let initialOwner: Owner
-    public let piece : Piece?
+    public var piece : Piece?
     
     public init(cellType: CellType, initialOwner: Owner = .noOne, piece: Piece? = nil) {
         self.cellType = cellType
