@@ -81,3 +81,21 @@ print(countPiecesPlayerOne)
 print("Board 3 : (ajout de la pièce du Lion du joueur 1)")
 let boardState3 = startingBoard.insertPiece(piece: lionJ1StartingCell.piece!, atRow: 1, andColumn: 0)
 print(startingBoard.description)
+
+
+let rules: VerySimpleRules = VerySimpleRules(occurrences: 0, historic: [])
+var initialBoard: Board = VerySimpleRules.createBoard()
+print("Create Board - VerySimpleRules")
+print(initialBoard.description)
+
+guard VerySimpleRules.checkBoard(initialBoard) == true else {
+    print("ERR : VerySimpleRules : Board invalide")
+    assert(false, "VerySimpleRules : Board invalide")
+}
+print("VerySimpleRules : Board valide")
+
+var player: Owner = rules.getNextPlayer()
+print(player)
+
+var nextMovesPlayer1 = rules.getMoves(for: initialBoard, of: .player1)
+print(nextMovesPlayer1)
