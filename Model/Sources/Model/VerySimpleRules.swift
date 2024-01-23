@@ -9,6 +9,7 @@ public struct VerySimpleRules: Rules {
         self.historic = historic
     }
     
+    ///Méthode permettant de créer une Board selon les règles simplifiées
     public static func createBoard() -> Board {
         let jungleEmptyCell: Cell = Cell(cellType: .jungle)
         let denEmptyCell: Cell = Cell(cellType: .den)
@@ -45,6 +46,7 @@ public struct VerySimpleRules: Rules {
         return initialBoard;
     }
     
+    ///Méthode permettant de vérifier la bonne forme du Board selon les règles simplifiées
     public static func checkBoard(_ board: Board) -> InvalidBoardError {
         let expectedRows = 5
         let expectedColumns = 5
@@ -83,10 +85,12 @@ public struct VerySimpleRules: Rules {
         return .noError
     }
     
+    ///Méthode permettant de connaître le prochain joueur
     public func getNextPlayer() -> Owner {
         return (historic.count % 2 == 0) ? .player1 : .player2
     }
     
+    ///Méthode permettant de connaître les prochains coups d'un joueur en fonction d'un plateau
     public func getMoves(for board: Board, of player: Owner) -> [Move] {
         var availableMoves: [Move] = []
 
@@ -112,6 +116,7 @@ public struct VerySimpleRules: Rules {
         return availableMoves
     }
     
+    ///Méthode permettant de connaître les prochains coups d'un joueur en fonction d'un plateau et des coordonnées d'une pièce
     public func getMoves(for board: Board, of player: Owner, fromRow row: Int, fromColumn column: Int) -> [Move] {
         var availableMoves: [Move] = []
 
@@ -120,6 +125,7 @@ public struct VerySimpleRules: Rules {
             return availableMoves
         }
 
+        ///vérifier les cases adjacentes
         for i in -1...1 {
             for j in -1...1 {
                 let destinationRow = row + i
@@ -137,6 +143,7 @@ public struct VerySimpleRules: Rules {
         return availableMoves
     }
     
+    ///Méthode permettant de savoir si un coup est valide à partir d'un Board et des coordonnées d'origine et de destination
     public func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) -> Bool {
         ///vérifier la validité des coordonnées données
         guard originRow >= 0 && originRow < board.nbRows && originColumn >= 0 && originColumn < board.nbColumns &&
@@ -161,11 +168,13 @@ public struct VerySimpleRules: Rules {
         return true
     }
     
+    ///Méthode permettant de savoir si un coup est valide à partir d'un Board et d'un coup
     public func isMoveValid(on board: Board, move: Move) -> Bool {
         ///on utilise la méthode précédente avec les coordonées du Move
         return isMoveValid(on: board, fromRow: move.rowOrigin, fromColumn: move.columnOrigin, toRow: move.rowDestination, toColumn: move.columnDestination)
     }
     
+    ///Méthode permettant de savoir si une partie est terminée
     public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) -> (Bool, Result) {
         ///vérifier si un joueur a atteint la tannière de l'adversaire
         let lastMoveCell = board.grid[lastMoveRow][lastMoveColumn]
@@ -189,7 +198,16 @@ public struct VerySimpleRules: Rules {
         return availableMoves.isEmpty ? (true, .winner(owner: opponent, .noMovesLeft)) : (false, .notFinished)
     }
     
-    public func playedMove(_ move: Move, on currentBoard: Board, resultingBoard: Board) {
+    ///Méthode permettant de stocker les coups réalisés
+    public mutating func playedMove(_ move: Move, on currentBoard: Board, resultingBoard: Board) {
+        ///Ajouter le dernier coup joué dans l'historique
+        historic.append(move)
 
+        ///Mettre à jour le nombre d'occurrences pour le nouveau plateau
+        if let count = occurrences[resultingBoard] {
+            occurrences[resultingBoard] = count + 1
+        } else {
+            occurrences[resultingBoard] = 1
+        }
     }
 }

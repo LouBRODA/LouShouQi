@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Rules{
+public protocol Rules : Hashable{
     var occurrences: [Board:Int] { get }
     var historic: [Move] { get }
     
@@ -12,5 +12,5 @@ public protocol Rules{
     func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) -> Bool
     func isMoveValid(on board: Board, move: Move) -> Bool
     func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) -> (Bool, Result)
-    func playedMove(_ move: Move, on currentBoard: Board, resultingBoard: Board)
+    mutating func playedMove(_ move: Move, on currentBoard: Board, resultingBoard: Board)
 }

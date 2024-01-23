@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Move : CustomStringConvertible {
+public struct Move : CustomStringConvertible, Hashable {
     public var description: String{
         return "\(owner.description) : [\(rowOrigin):\(columnOrigin)] -> [\(rowDestination):\(columnDestination)]"
     }
@@ -10,4 +10,12 @@ public struct Move : CustomStringConvertible {
     let columnOrigin: Int
     let rowDestination: Int
     let columnDestination: Int
+    
+    public init(owner: Owner, rowOrigin: Int, columnOrigin: Int, rowDestination: Int, columnDestination: Int) {
+        self.owner = owner
+        self.rowOrigin = rowOrigin
+        self.columnOrigin = columnOrigin
+        self.rowDestination = rowDestination
+        self.columnDestination = columnDestination
+    }
 }

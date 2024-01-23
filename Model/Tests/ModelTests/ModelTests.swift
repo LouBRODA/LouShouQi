@@ -4,7 +4,8 @@ import Model
 final class ModelTests: XCTestCase {
 
     var board: Board!
-
+    var rules = VerySimpleRules(occurrences: [:], historic: [])
+    
     ///Fonction lancée avant chaque fonction de test
     override func setUpWithError() throws {
         let piece = Piece(owner: .player1, animal: .cat)
@@ -12,6 +13,7 @@ final class ModelTests: XCTestCase {
         let cell2 = Cell(cellType: .jungle, initialOwner: .player1)
         let validGrid = [[cell, cell], [cell, cell2]]
         board = Board(withGrid: validGrid)
+        rules = VerySimpleRules(occurrences: [:], historic: [])
     }
 
     ///Fonction lancée après chaque fonction de test
@@ -211,4 +213,116 @@ final class ModelTests: XCTestCase {
         }
     }
 
+    ///TESTS POUR LA CLASSE VERY SIMPLE RULES
+    
+    ///Test de création et vérification du plateau
+    func testCreateBoard() {
+        let initialBoard = VerySimpleRules.createBoard()
+        XCTAssert(VerySimpleRules.checkBoard(initialBoard) == .noError)
+    }
+ 
+    ///Test de validation du tableau valide et invalide
+    func testCheckBoard() {
+        let validBoard = VerySimpleRules.createBoard()
+        XCTAssert(VerySimpleRules.checkBoard(validBoard) == .noError)
+
+        var invalidBoard = VerySimpleRules.createBoard()
+        let piece = Piece(owner: .player1, animal: .cat)
+        _ = invalidBoard.insertPiece(piece: piece, atRow: 0, andColumn: 0)
+        XCTAssert(VerySimpleRules.checkBoard(invalidBoard) != .noError)
+    }
+    
+    ///Test de récupération du prochain joueur
+    func testGetNextPlayer() {
+        let rules = VerySimpleRules(occurrences: [:], historic: [])
+        XCTAssert(rules.getNextPlayer() == .player1)
+    }
+    
+    ///Test de récupération des déplacements de pièce valides pour la première version de  la méthode
+    func testGetMovesV1() {
+        let rules = VerySimpleRules(occurrences: [:], historic: [])
+        let board = VerySimpleRules.createBoard()
+        let validMoves = rules.getMoves(for: board, of: .player1)
+        let expectedValidMoves = [Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 1, columnDestination: 1), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 0, columnDestination: 0), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 0, columnDestination: 2), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 3, rowDestination: 1, columnDestination: 3), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 3, rowDestination: 0, columnDestination: 2), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 3, rowDestination: 0, columnDestination: 4), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 0, rowDestination: 0, columnDestination: 0), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 0, rowDestination: 2, columnDestination: 0), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 0, rowDestination: 1, columnDestination: 1), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 2, rowDestination: 0, columnDestination: 2), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 2, rowDestination: 2, columnDestination: 2), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 2, rowDestination: 1, columnDestination: 1), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 2, rowDestination: 1, columnDestination: 3), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 4, rowDestination: 0, columnDestination: 4), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 4, rowDestination: 2, columnDestination: 4), Model.Move(owner: .player1, rowOrigin: 1, columnOrigin: 4, rowDestination: 1, columnDestination: 3)]
+        XCTAssert(validMoves == expectedValidMoves)
+    }
+    
+    ///Test de récupération des déplacements de pièce valides pour la deuxième version de  la méthode
+    func testGetMovesV2() {
+        let rules = VerySimpleRules(occurrences: [:], historic: [])
+        let board = VerySimpleRules.createBoard()
+        let validMoves = rules.getMoves(for: board, of: .player1, fromRow: 0, fromColumn: 1)
+        let expectedValidMoves = [Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 0, columnDestination: 0), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 0, columnDestination: 2), Model.Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 1, columnDestination: 1)]
+        XCTAssert(validMoves == expectedValidMoves)
+    }
+    
+    ///Test de la fin d'une partie
+    func testIsGameOver() {
+        let rules = VerySimpleRules(occurrences: [:], historic: [])
+        let board = VerySimpleRules.createBoard()
+        XCTAssert(rules.isGameOver(on: board, lastMoveRow: 0, lastMoveColumn: 1) == (false, .notFinished))
+    }
+    
+    ///Test de l'historisation d'un coup
+    func testPlayedMove() {
+        var rules = VerySimpleRules(occurrences: [:], historic: [])
+        let initialBoard = VerySimpleRules.createBoard()
+        let move = Move(owner: .player1, rowOrigin: 0, columnOrigin: 1, rowDestination: 1, columnDestination: 1)
+        let lionJ1: Piece = Piece(owner: .player1, animal: .lion)
+        var resultingBoard = initialBoard
+        _ = resultingBoard.removePiece(atRow: 0, andColumn: 1)
+        _ = resultingBoard.insertPiece(piece: lionJ1, atRow: 1, andColumn: 1)
+
+        rules.playedMove(move, on: initialBoard, resultingBoard: resultingBoard)
+
+        XCTAssertEqual(rules.historic, [move])
+        XCTAssertEqual(rules.occurrences[resultingBoard], 1)
+        XCTAssertEqual(rules.getNextPlayer(), .player2)
+    }
+    
+    ///TESTS HASHABLE - EQUALITY
+    
+    ///Test de la méthode == de Piece
+    func testEqualityPiece() {
+        let piece1 = Piece(owner: .player1, animal: .lion)
+        let piece2 = Piece(owner: .player1, animal: .lion)
+        let piece3 = Piece(owner: .player2, animal: .lion)
+        
+        XCTAssertEqual(piece1, piece2)
+        XCTAssertNotEqual(piece1, piece3)
+    }
+    
+    ///Test de la méthode hash de Piece
+    func testHashingPiece() {
+        let piece1 = Piece(owner: .player1, animal: .lion)
+        let piece2 = Piece(owner: .player1, animal: .lion)
+        let piece3 = Piece(owner: .player2, animal: .lion)
+        
+        XCTAssertEqual(piece1.hashValue, piece2.hashValue)
+        XCTAssertNotEqual(piece1.hashValue, piece3.hashValue)
+    }
+    
+    ///Test de la méthode == de Cell
+    func testEqualityCell() {
+        let piece1 = Piece(owner: .player1, animal: .lion)
+        let piece2 = Piece(owner: .player1, animal: .lion)
+        let cell1 = Cell(cellType: .jungle, initialOwner: .player1, piece: piece1)
+        let cell2 = Cell(cellType: .jungle, initialOwner: .player1, piece: piece2)
+        let cell3 = Cell(cellType: .water, initialOwner: .player2, piece: nil)
+        
+        XCTAssertEqual(cell1, cell2)
+        XCTAssertNotEqual(cell1, cell3)
+    }
+    
+    ///Test de la méthode hash de Cell
+    func testHashingCell() {
+        let piece1 = Piece(owner: .player1, animal: .lion)
+        let piece2 = Piece(owner: .player1, animal: .lion)
+        let cell1 = Cell(cellType: .jungle, initialOwner: .player1, piece: piece1)
+        let cell2 = Cell(cellType: .jungle, initialOwner: .player1, piece: piece2)
+        let cell3 = Cell(cellType: .water, initialOwner: .player2, piece: nil)
+        
+        XCTAssertEqual(cell1.hashValue, cell2.hashValue)
+        XCTAssertNotEqual(cell1.hashValue, cell3.hashValue)
+    }
 }
