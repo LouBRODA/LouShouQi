@@ -1,10 +1,10 @@
 import Foundation
 
 public struct VerySimpleRules: Rules {
-    public var occurrences: Int = 0
+    public var occurrences: [Board:Int] = [:]
     public var historic: [Move] = []
     
-    public init(occurrences: Int, historic: [Move]) {
+    public init(occurrences: [Board:Int], historic: [Move]) {
         self.occurrences = occurrences
         self.historic = historic
     }
@@ -45,42 +45,42 @@ public struct VerySimpleRules: Rules {
         return initialBoard;
     }
     
-    public static func checkBoard(_ board: Board) -> Bool {
+    public static func checkBoard(_ board: Board) -> InvalidBoardError {
         let expectedRows = 5
         let expectedColumns = 5
         
-        ///vérifier le nombre de lignes
-        guard board.nbRows == expectedRows else {
-            return false
+        ///vérifier le nombre de lignes et de colonnes
+        guard board.nbRows == expectedRows && board.nbColumns == expectedColumns else {
+            return .badDimensions(row: board.nbRows, column: board.nbColumns)
         }
         
-        ///vérifier le nombre de colonnes
-        guard board.nbColumns == expectedColumns else {
-            return false
+        ///vérifier l'emplacement de la niche du joueur 1 sur le board
+        guard board.grid[0][2].cellType == CellType.den else {
+            return .badCellType(cellType: .den, row: 0, column: 2)
         }
         
-        ///vérifier l'emplacement des niches sur le board
-        guard board.grid[0][2].cellType == CellType.den && board.grid[4][2].cellType == CellType.den else {
-            return false
+        ///vérifier l'emplacement de la niche du joueur 1 sur le board
+        guard board.grid[4][2].cellType == CellType.den else {
+            return .badCellType(cellType: .den, row: 4, column: 2)
         }
         
         ///vérifier le nombre de pièces de chaque joueur
         guard board.countOnePlayerPieces(of: .player1) < 6 &&
                 board.countOnePlayerPieces(of: .player2) < 6 else {
-            return false
+            return .numberOfPiece(piecesPlayer1: board.countOnePlayerPieces(of: .player1), piecesPlayer2: board.countOnePlayerPieces(of: .player2))
         }
         
         ///vérifier que les types d'animaux (wolf et leopard) ne sont pas présents sur le board
         guard !board.grid.flatMap({ $0 }).contains(where: { $0.piece?.animal == .wolf || $0.piece?.animal == .leopard || $0.piece?.animal == .dog }) else {
-            return false
+            return .animalNotAuthorized
         }
         
         ///vérifier qu'il n'y a pas de cases de type eau sur le plateau
         guard !board.grid.flatMap({ $0 }).contains(where: { $0.cellType == .water }) else {
-            return false
+            return .animalNotAuthorized
         }
         
-        return true
+        return .noError
     }
     
     public func getNextPlayer() -> Owner {
@@ -90,18 +90,26 @@ public struct VerySimpleRules: Rules {
     public func getMoves(for board: Board, of player: Owner) -> [Move] {
         var availableMoves: [Move] = []
 
-            for row in 0..<board.nbRows {
-                for column in 0..<board.nbColumns {
-                    let move = Move(owner: player, rowOrigin: row, columnOrigin: column, rowDestination: row, columnDestination: column)
+        for originRow in 0..<board.nbRows {
+            for originColumn in 0..<board.nbColumns {
+                ///Les quatres seuls déplacements possibles
+                let possibleMoves = [
+                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow - 1, columnDestination: originColumn),
+                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow + 1, columnDestination: originColumn),
+                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow, columnDestination: originColumn - 1),
+                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow, columnDestination: originColumn + 1)
+                ]
 
-                    ///vérifier si le coup est valide
+                ///on regarde quels coups sont valides parmi les coups possibles
+                for move in possibleMoves {
                     if isMoveValid(on: board, move: move) {
                         availableMoves.append(move)
                     }
                 }
             }
+        }
 
-            return availableMoves
+        return availableMoves
     }
     
     public func getMoves(for board: Board, of player: Owner, fromRow row: Int, fromColumn column: Int) -> [Move] {
@@ -145,35 +153,40 @@ public struct VerySimpleRules: Rules {
             return false
         }
         
+        ///vérifier si la cellule de destination contient déjà une pièce du joueur actuel
+        guard originCell.piece?.owner != destinationCell.piece?.owner else {
+            return false
+        }
+        
         return true
     }
     
     public func isMoveValid(on board: Board, move: Move) -> Bool {
-        //on utilise la méthode précédente avec les coordonées du Move
+        ///on utilise la méthode précédente avec les coordonées du Move
         return isMoveValid(on: board, fromRow: move.rowOrigin, fromColumn: move.columnOrigin, toRow: move.rowDestination, toColumn: move.columnDestination)
     }
     
-    public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) -> Bool {
+    public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) -> (Bool, Result) {
         ///vérifier si un joueur a atteint la tannière de l'adversaire
         let lastMoveCell = board.grid[lastMoveRow][lastMoveColumn]
         if lastMoveCell.cellType == .den {
             let currentPlayer = getNextPlayer()
             let opponent = (currentPlayer == .player1) ? Owner.player2 : Owner.player1
             guard lastMoveCell.piece?.owner != opponent else {
-                return true
+                return (true, .winner(owner: opponent, .denReached))
             }
         }
         
         ///vérifier si un joueur a mangé toutes les pièces de l'adversaire
         let (player1Pieces, player2Pieces) = board.countTwoPlayersPieces()
         guard player1Pieces != 0 || player2Pieces != 0 else {
-            return true
+            return (true, .winner(owner: (player1Pieces == 0) ? .player2 : .player1, .noMorePieces))
         }
 
         ///vérifier si l'adversaire ne peut pas faire le moindre mouvement
         let opponent = (getNextPlayer() == .player1) ? Owner.player2 : Owner.player1
         let availableMoves = getMoves(for: board, of: opponent)
-        return availableMoves.isEmpty
+        return availableMoves.isEmpty ? (true, .winner(owner: opponent, .noMovesLeft)) : (false, .notFinished)
     }
     
     public func playedMove(_ move: Move, on currentBoard: Board, resultingBoard: Board) {

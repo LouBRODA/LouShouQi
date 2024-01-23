@@ -2,6 +2,8 @@ import Foundation
 import Model
 import ExtensionsTestsCli
 
+//CREATION BOARD TEST
+
 let ratJ1: Piece = Piece(owner: .player1, animal: .rat)
 let ratJ2: Piece = Piece(owner: .player2, animal: .rat)
 let catJ1: Piece = Piece(owner: .player1, animal: .cat)
@@ -54,6 +56,10 @@ var startingBoard: Board = Board(withGrid: [
     [tigerJ2StartingCell, jungleEmptyCell, trapEmptyCell, denEmptyCell, trapEmptyCell, jungleEmptyCell, lionJ2StartingCell]
 ])!
 
+
+
+//METHODES BOARD TESTS
+
 var test = startingBoard.description
 print(test)
 
@@ -83,19 +89,46 @@ let boardState3 = startingBoard.insertPiece(piece: lionJ1StartingCell.piece!, at
 print(startingBoard.description)
 
 
-let rules: VerySimpleRules = VerySimpleRules(occurrences: 0, historic: [])
+
+//VERY SIMPLE RULES - COMMAND LINE TESTS
+
+//Création et affichage du Board
+let rules: VerySimpleRules = VerySimpleRules(occurrences: [:], historic: [])
 var initialBoard: Board = VerySimpleRules.createBoard()
 print("Create Board - VerySimpleRules")
 print(initialBoard.description)
 
-guard VerySimpleRules.checkBoard(initialBoard) == true else {
+//Vérification de l'état du Board
+guard VerySimpleRules.checkBoard(initialBoard) == .noError else {
     print("ERR : VerySimpleRules : Board invalide")
     assert(false, "VerySimpleRules : Board invalide")
 }
 print("VerySimpleRules : Board valide")
 
+//Affichage du prochain joueur
 var player: Owner = rules.getNextPlayer()
+print("Prochain joueur :")
 print(player)
 
-var nextMovesPlayer1 = rules.getMoves(for: initialBoard, of: .player1)
+//Affichage des prochains coups
+let nextMovesPlayer1 = rules.getMoves(for: initialBoard, of: .player1)
+print("Prochains coups du joueur 1 :")
 print(nextMovesPlayer1)
+
+let nextMovesPlayer1Bis = rules.getMoves(for: initialBoard, of: .player1, fromRow: 0, fromColumn: 1)
+print("Prochains coups du joueur 1 à partir de la case [0,1] :")
+print(nextMovesPlayer1Bis)
+
+//Vérification de l'état de la partie
+let gameOver: (Bool, Result) = rules.isGameOver(on: initialBoard, lastMoveRow: 0, lastMoveColumn: 1)
+print("Partie terminée ?")
+print(gameOver)
+
+//Modification du Board pour le falsifier
+let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
+print("Le Board est-il valide ?")
+if VerySimpleRules.checkBoard(initialBoard) != .noError {
+    print("ERR : VerySimpleRules : Board invalide")
+} else {
+    print("VerySimpleRules : Board valide")
+}

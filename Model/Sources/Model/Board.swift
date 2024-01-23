@@ -1,8 +1,7 @@
 import Foundation
 
 ///Structure définissant le plateau de jeu en lui-même
-public struct Board{
-    
+public struct Board : Hashable{
     ///Properties
     public let nbRows: Int
     public let nbColumns: Int
@@ -18,6 +17,18 @@ public struct Board{
         self.nbRows = grid.count
         self.nbColumns = checkRowSize
         self.grid = grid
+    }
+    
+    public static func == (left: Board, right: Board) -> Bool {
+        return left.nbRows == right.nbRows &&
+        left.nbColumns == right.nbColumns &&
+        left.grid == right.grid
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(nbRows)
+        hasher.combine(nbColumns)
+        hasher.combine(grid)
     }
     
     ///Méthode pour compter le nombre de pièces d'un joueur
