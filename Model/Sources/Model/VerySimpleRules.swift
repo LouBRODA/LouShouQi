@@ -3,7 +3,10 @@ import Foundation
 public struct VerySimpleRules: Rules {
     public var occurrences: [Board:Int] = [:]
     public var historic: [Move] = []
+    public static let expectedRows = 5
+    public static let expectedColumns = 5
     
+    //à enlever car useless
     public init(occurrences: [Board:Int], historic: [Move]) {
         self.occurrences = occurrences
         self.historic = historic
@@ -13,7 +16,7 @@ public struct VerySimpleRules: Rules {
     public static func createBoard() -> Board {
         let jungleEmptyCell: Cell = Cell(cellType: .jungle)
         let denEmptyCell: Cell = Cell(cellType: .den)
-        
+            
         let ratJ1: Piece = Piece(owner: .player1, animal: .rat)
         let ratJ2: Piece = Piece(owner: .player2, animal: .rat)
         let catJ1: Piece = Piece(owner: .player1, animal: .cat)
@@ -48,9 +51,6 @@ public struct VerySimpleRules: Rules {
     
     ///Méthode permettant de vérifier la bonne forme du Board selon les règles simplifiées
     public static func checkBoard(_ board: Board) -> InvalidBoardError {
-        let expectedRows = 5
-        let expectedColumns = 5
-        
         ///vérifier le nombre de lignes et de colonnes
         guard board.nbRows == expectedRows && board.nbColumns == expectedColumns else {
             return .badDimensions(row: board.nbRows, column: board.nbColumns)
@@ -61,7 +61,7 @@ public struct VerySimpleRules: Rules {
             return .badCellType(cellType: .den, row: 0, column: 2)
         }
         
-        ///vérifier l'emplacement de la niche du joueur 1 sur le board
+        ///vérifier l'emplacement de la niche du joueur 2 sur le board
         guard board.grid[4][2].cellType == CellType.den else {
             return .badCellType(cellType: .den, row: 4, column: 2)
         }
@@ -82,6 +82,12 @@ public struct VerySimpleRules: Rules {
             return .animalNotAuthorized
         }
         
+        ///vérifier qu'il n'y a au maximum qu'une occurence de chaque pièce
+        let flatPieces = board.grid.flatMap { $0 }.compactMap { $0.piece }
+        guard Set(flatPieces).count == flatPieces.count else {
+            return .multipleOccurrencesOfSamePiece(piece: flatPieces.first!)
+        }
+                
         return .noError
     }
     
@@ -164,6 +170,20 @@ public struct VerySimpleRules: Rules {
         guard originCell.piece?.owner != destinationCell.piece?.owner else {
             return false
         }
+        
+        //vérifier si la pièce de l'adversaire présente sur la cellule de destination possède une force inférieure à la pièce du joueur actuel
+        if let opponentPiece = destinationCell.piece {
+            guard piece.animal.rawValue >= opponentPiece.animal.rawValue else {
+                return false
+            }
+        }
+        
+        //vérifier si la cellule de destination ne correspond pas à la tanière du joueur actuel
+//        if destinationCell {
+//            guard opponentCell.cellType == .den && opponentCell.initialOwner == getNextPlayer() else {
+//                return false
+//            }
+//        }
         
         return true
     }
