@@ -179,11 +179,9 @@ public struct VerySimpleRules: Rules {
         }
         
         //vérifier si la cellule de destination ne correspond pas à la tanière du joueur actuel
-//        if destinationCell {
-//            guard opponentCell.cellType == .den && opponentCell.initialOwner == getNextPlayer() else {
-//                return false
-//            }
-//        }
+        guard destinationCell.cellType != .den && destinationCell.initialOwner != getNextPlayer() else {
+            return false
+        }
         
         return true
     }
