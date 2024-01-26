@@ -200,7 +200,7 @@ public struct VerySimpleRules: Rules {
         
         //vérifier si la pièce de l'adversaire présente sur la cellule de destination possède une force inférieure à la pièce du joueur actuel
         if let opponentPiece = destinationCell.piece {
-            guard piece.animal.rawValue >= opponentPiece.animal.rawValue else {
+            guard !(piece.animal.rawValue == 1 && opponentPiece.animal.rawValue == 8) && piece.animal.rawValue >= opponentPiece.animal.rawValue else {
                 return false
             }
         }
