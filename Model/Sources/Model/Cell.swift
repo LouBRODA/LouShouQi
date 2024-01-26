@@ -28,18 +28,4 @@ public struct Cell: CustomStringConvertible, Hashable {
         self.initialOwner = initialOwner
         self.piece = piece
     }
-    
-    // Méthode d'égalité pour le protocole Equatable.
-    public static func == (left: Cell, right: Cell) -> Bool {
-        return left.cellType == right.cellType &&
-            left.initialOwner == right.initialOwner &&
-            left.piece == right.piece
-    }
-    
-    // Méthode de hachage pour le protocole Hashable.
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(cellType)
-        hasher.combine(initialOwner)
-        hasher.combine(piece)
-    }
 }

@@ -21,16 +21,4 @@ public struct Piece: CustomStringConvertible, Hashable {
         self.owner = owner
         self.animal = animal
     }
-    
-    // Méthode d'égalité pour le protocole Equatable.
-    public static func == (left: Piece, right: Piece) -> Bool {
-        return left.owner == right.owner &&
-            left.animal == right.animal
-    }
-    
-    // Méthode de hachage pour le protocole Hashable.
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(owner)
-        hasher.combine(animal)
-    }
 }

@@ -23,15 +23,11 @@ public struct Board: Hashable {
     
     // Méthode d'égalité pour le protocole Hashable.
     public static func == (left: Board, right: Board) -> Bool {
-        return left.nbRows == right.nbRows &&
-            left.nbColumns == right.nbColumns &&
-            left.grid == right.grid
+        return left.grid == right.grid
     }
     
     // Méthode de hachage pour le protocole Hashable.
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(nbRows)
-        hasher.combine(nbColumns)
         hasher.combine(grid)
     }
     

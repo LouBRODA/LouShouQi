@@ -93,7 +93,7 @@ print(startingBoard.description)
 //VERY SIMPLE RULES - COMMAND LINE TESTS
 
 //Création et affichage du Board
-let rules: VerySimpleRules = VerySimpleRules(occurrences: [:], historic: [])
+let rules: VerySimpleRules = VerySimpleRules()
 var initialBoard: Board = VerySimpleRules.createBoard()
 print("Create Board - VerySimpleRules")
 print(initialBoard.description)

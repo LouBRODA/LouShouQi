@@ -6,11 +6,8 @@ public struct VerySimpleRules: Rules {
     public static let expectedRows = 5
     public static let expectedColumns = 5
     
-    //à enlever car useless
-    public init(occurrences: [Board:Int], historic: [Move]) {
-        self.occurrences = occurrences
-        self.historic = historic
-    }
+    /// Initialiseur des règles simplifiées.
+    public init() { }
     
     /// Crée un nouveau plateau de jeu initial.
     ///
