@@ -1,9 +1,10 @@
 import Foundation
 
-///Enumeration répertoriant les différents joueurs d'une partie ainsi que le 'non-joueur'
-public enum Owner : CustomStringConvertible{
+/// Énumération répertoriant les différents joueurs d'une partie ainsi que le 'non-joueur'.
+public enum Owner: CustomStringConvertible {
+    // Description textuelle de l'objet Owner.
     public var description: String {
-        switch self{
+        switch self {
         case .noOne:
             return "x"
         case .player1:
@@ -13,7 +14,12 @@ public enum Owner : CustomStringConvertible{
         }
     }
     
+    /// Cas représentant l'absence de joueur.
     case noOne
+    
+    /// Cas représentant le joueur 1.
     case player1
+    
+    /// Cas représentant le joueur 2.
     case player2
 }
