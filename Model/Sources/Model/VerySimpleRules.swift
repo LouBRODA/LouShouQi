@@ -52,45 +52,45 @@ public struct VerySimpleRules: Rules {
     ///
     /// - Parameter board: Le plateau de jeu à vérifier.
     /// - Returns: Une erreur d'invalidité du plateau s'il y en a une, sinon `.noError`.
-    public static func checkBoard(_ board: Board) -> InvalidBoardError {
+    public static func checkBoard(_ board: Board) throws -> Bool {
         //vérifier le nombre de lignes et de colonnes
         guard board.nbRows == expectedRows && board.nbColumns == expectedColumns else {
-            return .badDimensions(row: board.nbRows, column: board.nbColumns)
+            throw InvalidBoardError.badDimensions(row: board.nbRows, column: board.nbColumns)
         }
         
         //vérifier l'emplacement de la niche du joueur 1 sur le board
         guard board.grid[0][2].cellType == CellType.den else {
-            return .badCellType(cellType: .den, row: 0, column: 2)
+            throw InvalidBoardError.badCellType(cellType: .den, row: 0, column: 2)
         }
         
         //vérifier l'emplacement de la niche du joueur 2 sur le board
         guard board.grid[4][2].cellType == CellType.den else {
-            return .badCellType(cellType: .den, row: 4, column: 2)
+            throw InvalidBoardError.badCellType(cellType: .den, row: 4, column: 2)
         }
         
         //vérifier le nombre de pièces de chaque joueur
         guard board.countOnePlayerPieces(of: .player1) < 6 &&
                 board.countOnePlayerPieces(of: .player2) < 6 else {
-            return .numberOfPiece(piecesPlayer1: board.countOnePlayerPieces(of: .player1), piecesPlayer2: board.countOnePlayerPieces(of: .player2))
+            throw InvalidBoardError.numberOfPiece(piecesPlayer1: board.countOnePlayerPieces(of: .player1), piecesPlayer2: board.countOnePlayerPieces(of: .player2))
         }
         
         //vérifier que les types d'animaux (wolf et leopard) ne sont pas présents sur le board
         guard !board.grid.flatMap({ $0 }).contains(where: { $0.piece?.animal == .wolf || $0.piece?.animal == .leopard || $0.piece?.animal == .dog }) else {
-            return .animalNotAuthorized
+            throw InvalidBoardError.animalNotAuthorized
         }
         
         //vérifier qu'il n'y a pas de cases de type eau sur le plateau
         guard !board.grid.flatMap({ $0 }).contains(where: { $0.cellType == .water }) else {
-            return .animalNotAuthorized
+            throw InvalidBoardError.animalNotAuthorized
         }
         
         //vérifier qu'il n'y a au maximum qu'une occurence de chaque pièce
         let flatPieces = board.grid.flatMap { $0 }.compactMap { $0.piece }
         guard Set(flatPieces).count == flatPieces.count else {
-            return .multipleOccurrencesOfSamePiece(piece: flatPieces.first!)
+            throw InvalidBoardError.multipleOccurrencesOfSamePiece(piece: flatPieces.first!)
         }
                 
-        return .noError
+        return true
     }
     
     /// Obtient le joueur suivant dans la séquence du tour de jeu.
@@ -121,9 +121,12 @@ public struct VerySimpleRules: Rules {
 
                 //on regarde quels coups sont valides parmi les coups possibles
                 for move in possibleMoves {
-                    if isMoveValid(on: board, move: move) {
-                        availableMoves.append(move)
-                    }
+                    do {
+                        // Vérifier si le coup est valide
+                        if try isMoveValid(on: board, move: move) {
+                            availableMoves.append(move)
+                        }
+                    } catch { }
                 }
             }
         }
@@ -155,9 +158,15 @@ public struct VerySimpleRules: Rules {
 
                 let move = Move(owner: player, rowOrigin: row, columnOrigin: column, rowDestination: destinationRow, columnDestination: destinationColumn)
 
-                //vérifier si le coup est valide
-                if isMoveValid(on: board, move: move) {
-                    availableMoves.append(move)
+                // Utiliser do-catch pour traiter les erreurs
+                do {
+                    // Vérifier si le coup est valide
+                    if try isMoveValid(on: board, move: move) {
+                        availableMoves.append(move)
+                    }
+                } catch {
+                    // Gérer l'erreur ici (vous pouvez ajouter des logs, ignorer, etc.)
+                    print("Erreur lors de la validation du mouvement: \(error)")
                 }
             }
         }
@@ -174,11 +183,11 @@ public struct VerySimpleRules: Rules {
     ///   - destinationRow: La ligne de destination du mouvement.
     ///   - destinationColumn: La colonne de destination du mouvement.
     /// - Returns: `true` si le mouvement est valide, sinon `false`.
-    public func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) -> Bool {
+    public func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) throws -> Bool {
         //vérifier la validité des coordonnées données
         guard originRow >= 0 && originRow < board.nbRows && originColumn >= 0 && originColumn < board.nbColumns &&
               destinationRow >= 0 && destinationRow < board.nbRows && destinationColumn >= 0 && destinationColumn < board.nbColumns else {
-            return false
+            throw GameError.invalidMove
         }
 
         //récupérer les cellules d'origine et de destination en fonction des coordonnées données
@@ -187,24 +196,24 @@ public struct VerySimpleRules: Rules {
 
         //vérifier si la cellule d'origine contient une pièce du joueur actuel
         guard let piece = originCell.piece, piece.owner == getNextPlayer() else {
-            return false
+            throw GameError.invalidMove
         }
         
         //vérifier si la cellule de destination contient déjà une pièce du joueur actuel
         guard originCell.piece?.owner != destinationCell.piece?.owner else {
-            return false
+            throw GameError.invalidMove
         }
         
         //vérifier si la pièce de l'adversaire présente sur la cellule de destination possède une force inférieure à la pièce du joueur actuel
         if let opponentPiece = destinationCell.piece {
             guard !(piece.animal.rawValue == 1 && opponentPiece.animal.rawValue == 8) && piece.animal.rawValue >= opponentPiece.animal.rawValue else {
-                return false
+                throw GameError.invalidMove
             }
         }
         
         //vérifier si la cellule de destination ne correspond pas à la tanière du joueur actuel
         guard destinationCell.cellType != .den && destinationCell.initialOwner != getNextPlayer() else {
-            return false
+            throw GameError.invalidMove
         }
         
         return true
@@ -216,9 +225,9 @@ public struct VerySimpleRules: Rules {
     ///   - board: Le plateau de jeu actuel.
     ///   - move: Le mouvement à vérifier.
     /// - Returns: `true` si le mouvement est valide, sinon `false`.
-    public func isMoveValid(on board: Board, move: Move) -> Bool {
+    public func isMoveValid(on board: Board, move: Move) throws -> Bool {
         //on utilise la méthode précédente avec les coordonées du Move
-        return isMoveValid(on: board, fromRow: move.rowOrigin, fromColumn: move.columnOrigin, toRow: move.rowDestination, toColumn: move.columnDestination)
+        return try isMoveValid(on: board, fromRow: move.rowOrigin, fromColumn: move.columnOrigin, toRow: move.rowDestination, toColumn: move.columnDestination)
     }
     
     /// Vérifie si la partie est terminée sur le plateau donné après un certain mouvement.
@@ -228,7 +237,7 @@ public struct VerySimpleRules: Rules {
     ///   - lastMoveRow: La ligne du dernier mouvement.
     ///   - lastMoveColumn: La colonne du dernier mouvement.
     /// - Returns: Un tuple indiquant si la partie est terminée et le résultat de la partie.
-    public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) -> (Bool, Result) {
+    public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) throws -> (Bool, Result) {
         //vérifier si un joueur a atteint la tannière de l'adversaire
         let lastMoveCell = board.grid[lastMoveRow][lastMoveColumn]
         if lastMoveCell.cellType == .den {

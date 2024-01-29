@@ -99,7 +99,7 @@ print("Create Board - VerySimpleRules")
 print(initialBoard.description)
 
 //Vérification de l'état du Board
-guard VerySimpleRules.checkBoard(initialBoard) == .noError else {
+guard try VerySimpleRules.checkBoard(initialBoard) == true else {
     print("ERR : VerySimpleRules : Board invalide")
     assert(false, "VerySimpleRules : Board invalide")
 }
@@ -120,14 +120,14 @@ print("Prochains coups du joueur 1 à partir de la case [0,1] :")
 print(nextMovesPlayer1Bis)
 
 //Vérification de l'état de la partie
-let gameOver: (Bool, Result) = rules.isGameOver(on: initialBoard, lastMoveRow: 0, lastMoveColumn: 1)
+let gameOver: (Bool, Result) = try rules.isGameOver(on: initialBoard, lastMoveRow: 0, lastMoveColumn: 1)
 print("Partie terminée ?")
 print(gameOver)
 
 //Modification du Board pour le falsifier
 let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
 print("Le Board est-il valide ?")
-if VerySimpleRules.checkBoard(initialBoard) != .noError {
+if try VerySimpleRules.checkBoard(initialBoard) != true {
     print("ERR : VerySimpleRules : Board invalide")
 } else {
     print("VerySimpleRules : Board valide")
