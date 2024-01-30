@@ -124,11 +124,11 @@ let gameOver: (Bool, Result) = try rules.isGameOver(on: initialBoard, lastMoveRo
 print("Partie terminée ?")
 print(gameOver)
 
-//Modification du Board pour le falsifier
-let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
-print("Le Board est-il valide ?")
-if try VerySimpleRules.checkBoard(initialBoard) != true {
-    print("ERR : VerySimpleRules : Board invalide")
-} else {
-    print("VerySimpleRules : Board valide")
-}
+////Modification du Board pour le falsifier
+//let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
+//print("Le Board est-il valide ?")
+//if try VerySimpleRules.checkBoard(initialBoard) != true {
+//    print("ERR : VerySimpleRules : Board invalide")
+//} else {
+//    print("VerySimpleRules : Board valide")
+//}

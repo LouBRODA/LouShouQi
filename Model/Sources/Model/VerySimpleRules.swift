@@ -111,23 +111,8 @@ public struct VerySimpleRules: Rules {
 
         for originRow in 0..<board.nbRows {
             for originColumn in 0..<board.nbColumns {
-                //Les quatres seuls déplacements possibles
-                let possibleMoves = [
-                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow - 1, columnDestination: originColumn),
-                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow + 1, columnDestination: originColumn),
-                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow, columnDestination: originColumn - 1),
-                    Move(owner: player, rowOrigin: originRow, columnOrigin: originColumn, rowDestination: originRow, columnDestination: originColumn + 1)
-                ]
-
-                //on regarde quels coups sont valides parmi les coups possibles
-                for move in possibleMoves {
-                    do {
-                        // Vérifier si le coup est valide
-                        if try isMoveValid(on: board, move: move) {
-                            availableMoves.append(move)
-                        }
-                    } catch { }
-                }
+                let possibleMoves = getMoves(for: board, of: player, fromRow: originRow, fromColumn: originColumn)
+                availableMoves.append(contentsOf: possibleMoves)
             }
         }
 
@@ -153,20 +138,22 @@ public struct VerySimpleRules: Rules {
         //vérifier les cases adjacentes
         for i in -1...1 {
             for j in -1...1 {
-                let destinationRow = row + i
-                let destinationColumn = column + j
-
-                let move = Move(owner: player, rowOrigin: row, columnOrigin: column, rowDestination: destinationRow, columnDestination: destinationColumn)
-
-                // Utiliser do-catch pour traiter les erreurs
-                do {
-                    // Vérifier si le coup est valide
-                    if try isMoveValid(on: board, move: move) {
-                        availableMoves.append(move)
+                if i == 0 || j == 0 {
+                    let destinationRow = row + i
+                    let destinationColumn = column + j
+                    
+                    //vérifier si la cellule d'origine contient une pièce du joueur actuel
+                    if let piece = board.grid[row][column].piece, piece.owner == getNextPlayer() {
+                        
+                        let move = Move(owner: player, rowOrigin: row, columnOrigin: column, rowDestination: destinationRow, columnDestination: destinationColumn)
+                        
+                        do {
+                            // Vérifier si le coup est valide
+                            if try isMoveValid(on: board, move: move) {
+                                availableMoves.append(move)
+                            }
+                        } catch { }
                     }
-                } catch {
-                    // Gérer l'erreur ici (vous pouvez ajouter des logs, ignorer, etc.)
-                    print("Erreur lors de la validation du mouvement: \(error)")
                 }
             }
         }
@@ -193,11 +180,6 @@ public struct VerySimpleRules: Rules {
         //récupérer les cellules d'origine et de destination en fonction des coordonnées données
         let originCell = board.grid[originRow][originColumn]
         let destinationCell = board.grid[destinationRow][destinationColumn]
-
-        //vérifier si la cellule d'origine contient une pièce du joueur actuel
-        guard let piece = originCell.piece, piece.owner == getNextPlayer() else {
-            throw GameError.invalidMove
-        }
         
         //vérifier si la cellule de destination contient déjà une pièce du joueur actuel
         guard originCell.piece?.owner != destinationCell.piece?.owner else {
@@ -205,7 +187,7 @@ public struct VerySimpleRules: Rules {
         }
         
         //vérifier si la pièce de l'adversaire présente sur la cellule de destination possède une force inférieure à la pièce du joueur actuel
-        if let opponentPiece = destinationCell.piece {
+        if let opponentPiece = destinationCell.piece, let piece = originCell.piece {
             guard !(piece.animal.rawValue == 1 && opponentPiece.animal.rawValue == 8) && piece.animal.rawValue >= opponentPiece.animal.rawValue else {
                 throw GameError.invalidMove
             }
