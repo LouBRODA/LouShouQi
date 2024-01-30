@@ -40,7 +40,7 @@ final class RandomPlayerTest: XCTestCase {
 
         let emptyBoard = Board(withGrid: self.emptyGrid)
         let move = randomPlayer?.chooseMove(in: emptyBoard!, with: self.rules)
-        XCTAssertNil(move, "La méthode chooseMove doit renvoyer nil avec un plateau vide.")
+        XCTAssertNil(move, "ERR : La méthode chooseMove doit renvoyer nil avec un plateau vide !")
     }
     
 }
