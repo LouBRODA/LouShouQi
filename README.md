@@ -70,6 +70,16 @@ func testInitPerformance() throws {
 
 ---
 
+<div id='tp3'/>
+
+### Découvertes du TP3
+
+Désormais, je me suis intéressé en la mise en place des règles du jeu. Pour cela, j'ai créé mon premier `protocole` correspondant à une `interface`. Pour commencer plus simplement, j'ai mis en place des règles simplifiées au sein de la classe `VerySimpleRules` implémentant le protocole. ([Documentation officielle](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/protocols/))  
+
+Au delà de cette notion, j'ai aussi pu découvrir la gestion et le lancement d'erreur dans mes méthodes. Pour cela, j'ai pu implémenter deux énumérations d'erreurs personnalisées héritant du protocole `Error`. Les principales notions à savoir gérer concernant les erreurs et que j'ai pu expérimenter sont le lancement d'une erreur et la propagation de celle-ci.  
+
+---
+
 <div id='auteur'/>
 
 ## Auteur :technologist: 
