@@ -15,6 +15,9 @@ public class Player {
     ///   - name: Nom du joueur.
     ///   - id: Identifiant du joueur.
     public init?(withName name: String, andId id: Owner) {
+        guard (id == .player1 || id == .player2) else {
+            return nil
+        }
         self.name = name
         self.id = id
     }
@@ -25,7 +28,7 @@ public class Player {
     ///   - board: Le plateau de jeu actuel.
     ///   - rules: Les règles choisies pour la partie en cours.
     /// - Returns: Le coup choisi.
-    public func chooseMove(in board: Board, with rules: any Rules) throws -> Move? {
+    public func chooseMove(in board: Board, with rules: any Rules) -> Move? {
         nil
     }
 }

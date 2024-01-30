@@ -125,10 +125,41 @@ print("Partie terminée ?")
 print(gameOver)
 
 ////Modification du Board pour le falsifier
-//let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
-//print("Le Board est-il valide ?")
-//if try VerySimpleRules.checkBoard(initialBoard) != true {
-//    print("ERR : VerySimpleRules : Board invalide")
-//} else {
-//    print("VerySimpleRules : Board valide")
-//}
+let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
+print("Le Board est-il valide ?")
+do {
+    try _ = VerySimpleRules.checkBoard(initialBoard)
+    print("VerySimpleRules : Board valide")
+} catch InvalidBoardError.numberOfPiece(piecesPlayer1: 6, piecesPlayer2: 5) {
+    print("ERR : VerySimpleRules : Board invalide")
+}
+
+
+
+// PLAYER - COMMAND LINE TOOLS
+
+var playerRules: VerySimpleRules = VerySimpleRules()
+var playerBoard: Board = VerySimpleRules.createBoard()
+var preMovePlayerBoard = playerBoard
+
+print(playerBoard)
+
+let botStupide: RandomPlayer = RandomPlayer(withName: "BotStupide", andId: .player1)!
+//let humanPlayerLou: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: )
+
+var nextPlayer = playerRules.getNextPlayer()
+print(nextPlayer)
+
+var moves1BotStupide = rules.getMoves(for: playerBoard, of: botStupide.id)
+let selectFirstMoveBotStupide = botStupide.chooseMove(in: playerBoard, with: playerRules)
+_ = playerBoard.removePiece(atRow: selectFirstMoveBotStupide!.rowOrigin, andColumn: selectFirstMoveBotStupide!.columnOrigin)
+_ = playerBoard.insertPiece(piece: ratJ1, atRow: selectFirstMoveBotStupide!.rowDestination, andColumn: selectFirstMoveBotStupide!.columnDestination)
+
+print(playerBoard)
+
+playerRules.playedMove(selectFirstMoveBotStupide!, on: preMovePlayerBoard, resultingBoard: playerBoard)
+
+nextPlayer = playerRules.getNextPlayer()
+print(nextPlayer)
+
+

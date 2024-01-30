@@ -17,7 +17,7 @@ public class RandomPlayer : Player {
     ///   - board: Le plateau de jeu actuel.
     ///   - rules: Les règles choisies pour la partie en cours.
     /// - Returns: Le coup choisi.
-    public override func chooseMove(in board: Board, with rules: any Rules) throws -> Move? {
+    public override func chooseMove(in board: Board, with rules: any Rules) -> Move? {
         //obtenir la liste des différents coups possibles pour un board, des règles et un joueur donné
         let availableMoves: [Move] = rules.getMoves(for: board, of: id)
         

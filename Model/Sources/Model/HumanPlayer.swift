@@ -9,7 +9,7 @@ public class HumanPlayer : Player {
     /// - Parameters:
     ///   - name: Nom du joueur.
     ///   - id: Identifiant du joueur.
-    ///   - input: La mé
+    ///   - input: La méthode permettant de récupérer
     public init?(withName name: String, andId id: Owner, andInputMethod input: @escaping () -> Move) {
         self.input = input
         super.init(withName: name, andId: id)
@@ -22,6 +22,6 @@ public class HumanPlayer : Player {
     ///   - rules: Les règles choisies pour la partie en cours.
     /// - Returns: Le coup choisi.
     public override func chooseMove(in board: Board, with rules: any Rules) -> Move? {
-        return nil
+        return input()
     }
 }

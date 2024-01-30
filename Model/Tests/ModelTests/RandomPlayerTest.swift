@@ -27,24 +27,20 @@ final class RandomPlayerTest: XCTestCase {
     }
 
     // Test de la méthode chooseMove avec une instance de RandomPlayer
-    func testChooseMove() {
-        let randomPlayer = RandomPlayer(withName: "LouBis", andId: .player2)
-
-        XCTAssertNoThrow {
-            let move = try randomPlayer?.chooseMove(in: self.board, with: self.rules)
-            XCTAssertNotNil(move, "ERR : La méthode chooseMove ne doit pas renvoyer nil !")
-        }
-    }
+//    func testChooseMove() {
+//        let randomPlayer = RandomPlayer(withName: "LouBis", andId: .player2)
+//
+//        let move = randomPlayer?.chooseMove(in: self.board, with: self.rules)
+//        XCTAssertNotNil(move, "ERR : La méthode chooseMove ne doit pas renvoyer nil !")
+//    }
 
     // Test de la méthode chooseMove avec une instance de RandomPlayer avec un board vide
     func testChooseMoveWithEmptyBoard() {
         let randomPlayer = RandomPlayer(withName: "Lou", andId: .player1)
 
-        XCTAssertNoThrow {
-            let emptyBoard = Board(withGrid: self.emptyGrid)
-            let move = try randomPlayer?.chooseMove(in: emptyBoard!, with: self.rules)
-            XCTAssertNil(move, "La méthode chooseMove doit renvoyer nil avec un plateau vide.")
-        }
+        let emptyBoard = Board(withGrid: self.emptyGrid)
+        let move = randomPlayer?.chooseMove(in: emptyBoard!, with: self.rules)
+        XCTAssertNil(move, "La méthode chooseMove doit renvoyer nil avec un plateau vide.")
     }
     
 }

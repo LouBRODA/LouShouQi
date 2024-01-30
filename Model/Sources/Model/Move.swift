@@ -8,19 +8,19 @@ public struct Move: CustomStringConvertible, Hashable {
     }
     
     // Le propriétaire du mouvement.
-    let owner: Owner
+    public let owner: Owner
     
     // Ligne d'origine du mouvement.
-    let rowOrigin: Int
+    public let rowOrigin: Int
     
     // Colonne d'origine du mouvement.
-    let columnOrigin: Int
+    public let columnOrigin: Int
     
     // Ligne de destination du mouvement.
-    let rowDestination: Int
+    public let rowDestination: Int
     
     // Colonne de destination du mouvement.
-    let columnDestination: Int
+    public let columnDestination: Int
     
     /// Initialiseur de la structure `Move`.
     ///

@@ -29,10 +29,8 @@ final class PlayerTest: XCTestCase {
     func testChooseMove() {
         let player = Player(withName: "LouBis", andId: .player2)
         
-        XCTAssertNoThrow {
-            let move = try player?.chooseMove(in: self.board, with: self.rules)
-            XCTAssertNil(move, "La méthode chooseMove doit renvoyer nil.")
-        }
+        let move = player?.chooseMove(in: self.board, with: self.rules)
+        XCTAssertNil(move, "La méthode chooseMove doit renvoyer nil.")
     }
     
 }
