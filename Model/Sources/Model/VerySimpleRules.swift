@@ -90,6 +90,14 @@ public struct VerySimpleRules: Rules {
             throw InvalidBoardError.multipleOccurrencesOfSamePiece(piece: flatPieces.first!)
         }
                 
+        //vérifier que toutes les pièces ont bien un propriétaire
+        if !board.grid.flatMap({ $0 }).allSatisfy({ $0.piece?.owner != nil }) {
+            //trouver la première pièce sans propriétaire
+            if let pieceWithoutOwner = board.grid.flatMap({ $0 }).first(where: { $0.piece?.owner == nil })?.piece {
+                throw InvalidBoardError.pieceWithNoOwner(piece: pieceWithoutOwner)
+            }
+        }
+        
         return true
     }
     

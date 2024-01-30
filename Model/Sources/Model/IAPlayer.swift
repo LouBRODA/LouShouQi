@@ -1,8 +1,8 @@
 import Foundation
 
-public class RandomPlayer : Player {
+public class IAPlayer : Player {
     
-    /// Initialiseur du RandomPlayer.
+    /// Initialiseur de l'iAPlayer.
     ///
     /// - Parameters:
     ///   - name: Nom du joueur.
@@ -26,7 +26,12 @@ public class RandomPlayer : Player {
             return nil
         }
         
-        //choisir un coup aléatoire parmi les coups possibles
-        return availableMoves.randomElement()
+        //regarder si l'on peut atteindre une pièce de force inférieure ou égale
+        
+
+        //éviter de se placer à côté d'une pièce de force supérieure ou égale
+
+        
+        return nil
     }
 }

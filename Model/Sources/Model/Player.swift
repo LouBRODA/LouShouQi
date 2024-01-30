@@ -9,7 +9,7 @@ public class Player {
     // Nom du joueur.
     public let name: String
     
-    /// Initialiseur de la cellule.
+    /// Initialiseur du Player.
     ///
     /// - Parameters:
     ///   - name: Nom du joueur.

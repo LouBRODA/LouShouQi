@@ -4,7 +4,7 @@ public class HumanPlayer : Player {
     
     public let input: () -> Move
     
-    /// Initialiseur de la cellule.
+    /// Initialiseur du HumanPlayer.
     ///
     /// - Parameters:
     ///   - name: Nom du joueur.
