@@ -9,7 +9,8 @@ Les consignes étant déjà toutes expliquées [ici](https://codefirst.iut.uca.f
 Sommaire 
  1. [TP1](#tp1)
  2. [TP2](#tp2)
- 3. [Auteur](#auteur)
+ 3. [TP3](#tp3)
+ 4. [Auteur](#auteur)
 
 ---
 
