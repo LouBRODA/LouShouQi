@@ -2,7 +2,7 @@ import Foundation
 
 public class HumanPlayer : Player {
     
-    public let input: () -> Move
+    public let input: () -> Move?
     
     /// Initialiseur du HumanPlayer.
     ///
@@ -10,7 +10,7 @@ public class HumanPlayer : Player {
     ///   - name: Nom du joueur.
     ///   - id: Identifiant du joueur.
     ///   - input: La méthode permettant de récupérer
-    public init?(withName name: String, andId id: Owner, andInputMethod input: @escaping () -> Move) {
+    public init?(withName name: String, andId id: Owner, andInputMethod input: @escaping () -> Move?) {
         self.input = input
         super.init(withName: name, andId: id)
     }

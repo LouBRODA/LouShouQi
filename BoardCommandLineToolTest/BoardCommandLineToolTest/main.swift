@@ -144,8 +144,26 @@ var preMovePlayerBoard = playerBoard
 
 print(playerBoard)
 
+private func inputHumanMethod() -> Move? {
+    let moves = rules.getMoves(for: playerBoard, of: .player2)
+    print("Choisissez un déplacement :")
+    
+    for (index, move) in moves.enumerated() {
+        print("\(index + 1). \(move.description)")
+    }
+    
+    if let selectedIndex = readLine(), let index = Int(selectedIndex), index > 0, index <= moves.count {
+        let selectedMove = moves[index - 1]
+        print("Vous avez choisi le déplacement numéro \(selectedIndex): \(selectedMove.description)")
+        return selectedMove
+    } else {
+        print("Choix invalide.")
+        return nil
+    }
+}
+
 let botStupide: RandomPlayer = RandomPlayer(withName: "BotStupide", andId: .player1)!
-//let humanPlayerLou: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: )
+let humanPlayerLou: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
 
 var nextPlayer = playerRules.getNextPlayer()
 print(nextPlayer)
@@ -162,4 +180,16 @@ playerRules.playedMove(selectFirstMoveBotStupide!, on: preMovePlayerBoard, resul
 nextPlayer = playerRules.getNextPlayer()
 print(nextPlayer)
 
+preMovePlayerBoard = playerBoard
+var moves1HumanPlayer = rules.getMoves(for: playerBoard, of: humanPlayerLou.id)
+let selectFirstMoveHumanPlayer = humanPlayerLou.chooseMove(in: playerBoard, with: playerRules)
 
+_ = playerBoard.removePiece(atRow: selectFirstMoveHumanPlayer!.rowOrigin, andColumn: selectFirstMoveHumanPlayer!.columnOrigin)
+_ = playerBoard.insertPiece(piece: ratJ2, atRow: selectFirstMoveHumanPlayer!.rowDestination, andColumn: selectFirstMoveHumanPlayer!.columnDestination)
+
+print(playerBoard)
+
+playerRules.playedMove(selectFirstMoveBotStupide!, on: preMovePlayerBoard, resultingBoard: playerBoard)
+
+nextPlayer = playerRules.getNextPlayer()
+print(nextPlayer)

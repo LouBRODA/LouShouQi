@@ -151,7 +151,7 @@ public struct VerySimpleRules: Rules {
                     let destinationColumn = column + j
                     
                     //vérifier si la cellule d'origine contient une pièce du joueur actuel
-                    if let piece = board.grid[row][column].piece, piece.owner == getNextPlayer() {
+                    if let piece = board.grid[row][column].piece, piece.owner == player {
                         
                         let move = Move(owner: player, rowOrigin: row, columnOrigin: column, rowDestination: destinationRow, columnDestination: destinationColumn)
                         
