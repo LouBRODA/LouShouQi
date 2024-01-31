@@ -31,6 +31,9 @@ public class IAPlayer : Player {
         //regarder si l'on peut atteindre une pièce de force inférieure ou égale
         
 
+        //déplacer une pièce menacée par une pièce adverse adjacente de force supérieure ou égale
+        
+        
         //éviter de se placer à côté d'une pièce de force supérieure ou égale
 
         

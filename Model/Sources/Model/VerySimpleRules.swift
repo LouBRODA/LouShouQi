@@ -202,7 +202,17 @@ public struct VerySimpleRules: Rules {
         }
         
         //vérifier si la cellule de destination ne correspond pas à la tanière du joueur actuel
-        guard destinationCell.cellType != .den && destinationCell.initialOwner != getNextPlayer() else {
+        if destinationCell.cellType == .den {
+            if destinationCell.initialOwner != getNextPlayer(){
+                throw GameError.invalidMove
+            }
+        }
+        
+        //vérifier si le déplacement n'est pas supérieur à une case
+        if abs(originRow - destinationRow) <= 0 && abs(originRow - destinationRow) >= 1 &&
+           abs(originColumn - destinationColumn) <= 0 && abs(originColumn - destinationColumn) >= 1 &&
+            abs(originRow - destinationRow) + abs(originColumn - destinationColumn) != 0 &&
+            abs(originRow - destinationRow) + abs(originColumn - destinationColumn) != 2 {
             throw GameError.invalidMove
         }
         
