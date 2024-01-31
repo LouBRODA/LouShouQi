@@ -1,5 +1,6 @@
 import Foundation
 
+/// Classe définissant une intelligence artificielle héritant de la classe Player.
 public class IAPlayer : Player {
     
     /// Initialiseur de l'iAPlayer.
@@ -8,6 +9,7 @@ public class IAPlayer : Player {
     ///   - name: Nom du joueur.
     ///   - id: Identifiant du joueur.
     public override init?(withName name: String, andId id: Owner) {
+        //on utilise l'init de la classe mère
         super.init(withName: name, andId: id)
     }
     

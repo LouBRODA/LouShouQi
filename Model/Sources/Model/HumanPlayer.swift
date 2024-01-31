@@ -1,7 +1,9 @@
 import Foundation
 
+/// Classe définissant un joueur humain héritant de la classe Player.
 public class HumanPlayer : Player {
     
+    //méthode permettant au joueur de choisir un move
     public let input: () -> Move?
     
     /// Initialiseur du HumanPlayer.
@@ -12,6 +14,7 @@ public class HumanPlayer : Player {
     ///   - input: La méthode permettant de récupérer
     public init?(withName name: String, andId id: Owner, andInputMethod input: @escaping () -> Move?) {
         self.input = input
+        //on utilise l'init de la classe mère
         super.init(withName: name, andId: id)
     }
     
