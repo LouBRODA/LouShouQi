@@ -140,10 +140,12 @@ do {
 
 var playerRules: VerySimpleRules = VerySimpleRules()
 var playerBoard: Board = VerySimpleRules.createBoard()
-var preMovePlayerBoard = playerBoard
+var selectedPiece: Piece
 
+//Plateau de départ
 print(playerBoard)
 
+//Input méthode pour le HumanPlayer
 private func inputHumanMethod() -> Move? {
     let moves = rules.getMoves(for: playerBoard, of: .player2)
     print("Choisissez un déplacement :")
@@ -162,21 +164,29 @@ private func inputHumanMethod() -> Move? {
     }
 }
 
+//Définition des joueurs
 let botStupide: RandomPlayer = RandomPlayer(withName: "BotStupide", andId: .player1)!
 let humanPlayerLou: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
 
 var nextPlayer = playerRules.getNextPlayer()
+
+//TOUR 1 - RANDOM PLAYER
 print(nextPlayer)
 
+var preMovePlayerBoard = playerBoard
 var moves1BotStupide = rules.getMoves(for: playerBoard, of: botStupide.id)
 let selectFirstMoveBotStupide = botStupide.chooseMove(in: playerBoard, with: playerRules)
+
+selectedPiece = playerBoard.grid[selectFirstMoveBotStupide!.rowOrigin][selectFirstMoveBotStupide!.columnOrigin].piece!
 _ = playerBoard.removePiece(atRow: selectFirstMoveBotStupide!.rowOrigin, andColumn: selectFirstMoveBotStupide!.columnOrigin)
-_ = playerBoard.insertPiece(piece: ratJ1, atRow: selectFirstMoveBotStupide!.rowDestination, andColumn: selectFirstMoveBotStupide!.columnDestination)
+_ = playerBoard.insertPiece(piece: selectedPiece, atRow: selectFirstMoveBotStupide!.rowDestination, andColumn: selectFirstMoveBotStupide!.columnDestination)
 
 print(playerBoard)
 
 playerRules.playedMove(selectFirstMoveBotStupide!, on: preMovePlayerBoard, resultingBoard: playerBoard)
 
+
+//TOUR 2 - HUMAN PLAYER
 nextPlayer = playerRules.getNextPlayer()
 print(nextPlayer)
 
@@ -184,8 +194,9 @@ preMovePlayerBoard = playerBoard
 var moves1HumanPlayer = rules.getMoves(for: playerBoard, of: humanPlayerLou.id)
 let selectFirstMoveHumanPlayer = humanPlayerLou.chooseMove(in: playerBoard, with: playerRules)
 
+selectedPiece = playerBoard.grid[selectFirstMoveHumanPlayer!.rowOrigin][selectFirstMoveHumanPlayer!.columnOrigin].piece!
 _ = playerBoard.removePiece(atRow: selectFirstMoveHumanPlayer!.rowOrigin, andColumn: selectFirstMoveHumanPlayer!.columnOrigin)
-_ = playerBoard.insertPiece(piece: ratJ2, atRow: selectFirstMoveHumanPlayer!.rowDestination, andColumn: selectFirstMoveHumanPlayer!.columnDestination)
+_ = playerBoard.insertPiece(piece: selectedPiece, atRow: selectFirstMoveHumanPlayer!.rowDestination, andColumn: selectFirstMoveHumanPlayer!.columnDestination)
 
 print(playerBoard)
 
