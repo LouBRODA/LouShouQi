@@ -14,8 +14,9 @@ public struct VerySimpleRules: Rules {
     /// - Returns: Un nouveau plateau de jeu.
     public static func createBoard() -> Board {
         let jungleEmptyCell: Cell = Cell(cellType: .jungle)
-        let denEmptyCell: Cell = Cell(cellType: .den)
-            
+        let denEmptyCellJ1: Cell = Cell(cellType: .den, initialOwner: .player1)
+        let denEmptyCellJ2: Cell = Cell(cellType: .den, initialOwner: .player2)
+
         let ratJ1: Piece = Piece(owner: .player1, animal: .rat)
         let ratJ2: Piece = Piece(owner: .player2, animal: .rat)
         let catJ1: Piece = Piece(owner: .player1, animal: .cat)
@@ -39,11 +40,11 @@ public struct VerySimpleRules: Rules {
         let elephantJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: elephantJ2.owner, piece: elephantJ2)
         
         let initialBoard: Board = Board(withGrid: [
-        [jungleEmptyCell, lionJ1StartingCell, denEmptyCell, tigerJ1StartingCell, jungleEmptyCell],
+        [jungleEmptyCell, lionJ1StartingCell, denEmptyCellJ1, tigerJ1StartingCell, jungleEmptyCell],
         [ratJ1StartingCell, jungleEmptyCell, catJ1StartingCell, jungleEmptyCell, elephantJ1StartingCell],
         [jungleEmptyCell, jungleEmptyCell, jungleEmptyCell, jungleEmptyCell, jungleEmptyCell],
         [elephantJ2StartingCell, jungleEmptyCell, catJ2StartingCell, jungleEmptyCell, ratJ2StartingCell],
-        [jungleEmptyCell, tigerJ2StartingCell, denEmptyCell, lionJ2StartingCell, jungleEmptyCell],
+        [jungleEmptyCell, tigerJ2StartingCell, denEmptyCellJ2, lionJ2StartingCell, jungleEmptyCell],
         ])!;
         return initialBoard;
     }
