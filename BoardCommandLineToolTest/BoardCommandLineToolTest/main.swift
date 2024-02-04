@@ -99,7 +99,7 @@ print("Create Board - VerySimpleRules")
 print(initialBoard.description)
 
 //Vérification de l'état du Board
-guard VerySimpleRules.checkBoard(initialBoard) == .noError else {
+guard try VerySimpleRules.checkBoard(initialBoard) == true else {
     print("ERR : VerySimpleRules : Board invalide")
     assert(false, "VerySimpleRules : Board invalide")
 }
@@ -120,15 +120,101 @@ print("Prochains coups du joueur 1 à partir de la case [0,1] :")
 print(nextMovesPlayer1Bis)
 
 //Vérification de l'état de la partie
-let gameOver: (Bool, Result) = rules.isGameOver(on: initialBoard, lastMoveRow: 0, lastMoveColumn: 1)
+let gameOver: (Bool, Result) = try rules.isGameOver(on: initialBoard, lastMoveRow: 0, lastMoveColumn: 1)
 print("Partie terminée ?")
 print(gameOver)
 
-//Modification du Board pour le falsifier
+////Modification du Board pour le falsifier
 let falseBoard = initialBoard.insertPiece(piece: wolfJ1, atRow: 0, andColumn: 0)
 print("Le Board est-il valide ?")
-if VerySimpleRules.checkBoard(initialBoard) != .noError {
-    print("ERR : VerySimpleRules : Board invalide")
-} else {
+do {
+    try _ = VerySimpleRules.checkBoard(initialBoard)
     print("VerySimpleRules : Board valide")
+} catch InvalidBoardError.numberOfPiece(piecesPlayer1: 6, piecesPlayer2: 5) {
+    print("ERR : VerySimpleRules : Board invalide")
+}
+
+
+
+// PLAYER - COMMAND LINE TOOLS
+
+var playerRules: VerySimpleRules = VerySimpleRules()
+var playerBoard: Board = VerySimpleRules.createBoard()
+var selectedPiece: Piece
+var winningReason: (Bool, Result) = (false, .notFinished)
+
+//Input méthode pour le HumanPlayer
+private func inputHumanMethod(humanPlayer: HumanPlayer) -> Move? {
+    let moves = rules.getMoves(for: playerBoard, of: humanPlayer.id)
+    print("Choisissez un déplacement :")
+    
+    for (index, move) in moves.enumerated() {
+        print("\(index + 1). \(move.description)")
+    }
+    
+    if let selectedIndex = readLine(), let index = Int(selectedIndex), index > 0, index <= moves.count {
+        let selectedMove = moves[index - 1]
+        print("Vous avez choisi le déplacement numéro \(selectedIndex): \(selectedMove.description)")
+        return selectedMove
+    } else {
+        print("Choix invalide.")
+        return nil
+    }
+}
+
+//Plateau de départ
+print(playerBoard)
+
+//Définition des joueurs
+let botStupide: RandomPlayer = RandomPlayer(withName: "BotStupide", andId: .player1)!
+let humanPlayerLou: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
+
+while(winningReason == (false, .notFinished)){
+    
+    let nextPlayer = playerRules.getNextPlayer()
+    var preMovePlayerBoard = playerBoard
+    
+    if(nextPlayer == botStupide.id){
+        //TOUR 1 - RANDOM PLAYER
+        print(nextPlayer)
+
+        var _ = rules.getMoves(for: playerBoard, of: botStupide.id)
+        let selectMoveRandomPlayer = botStupide.chooseMove(in: playerBoard, with: playerRules)
+
+        selectedPiece = playerBoard.grid[selectMoveRandomPlayer!.rowOrigin][selectMoveRandomPlayer!.columnOrigin].piece!
+        _ = playerBoard.removePiece(atRow: selectMoveRandomPlayer!.rowOrigin, andColumn: selectMoveRandomPlayer!.columnOrigin)
+        if let _ = playerBoard.grid[selectMoveRandomPlayer!.rowDestination][selectMoveRandomPlayer!.columnDestination].piece {
+            _ = playerBoard.removePiece(atRow: selectMoveRandomPlayer!.rowDestination, andColumn: selectMoveRandomPlayer!.columnDestination)
+        }
+        _ = playerBoard.insertPiece(piece: selectedPiece, atRow: selectMoveRandomPlayer!.rowDestination, andColumn: selectMoveRandomPlayer!.columnDestination)
+
+        print(playerBoard)
+
+        playerRules.playedMove(selectMoveRandomPlayer!, on: preMovePlayerBoard, resultingBoard: playerBoard)
+
+        winningReason = try playerRules.isGameOver(on: playerBoard, lastMoveRow: selectMoveRandomPlayer!.rowDestination, lastMoveColumn: selectMoveRandomPlayer!.columnDestination)
+        print(winningReason)
+    }
+    else if(nextPlayer == humanPlayerLou.id){
+        //TOUR 2 - HUMAN PLAYER
+        print(nextPlayer)
+        
+        preMovePlayerBoard = playerBoard
+        var _ = rules.getMoves(for: playerBoard, of: humanPlayerLou.id)
+        let selectMoveHumanPlayer = humanPlayerLou.chooseMove(in: playerBoard, with: playerRules)
+        
+        selectedPiece = playerBoard.grid[selectMoveHumanPlayer!.rowOrigin][selectMoveHumanPlayer!.columnOrigin].piece!
+        _ = playerBoard.removePiece(atRow: selectMoveHumanPlayer!.rowOrigin, andColumn: selectMoveHumanPlayer!.columnOrigin)
+        if let _ = playerBoard.grid[selectMoveHumanPlayer!.rowDestination][selectMoveHumanPlayer!.columnDestination].piece {
+            _ = playerBoard.removePiece(atRow: selectMoveHumanPlayer!.rowDestination, andColumn: selectMoveHumanPlayer!.columnDestination)
+        }
+        _ = playerBoard.insertPiece(piece: selectedPiece, atRow: selectMoveHumanPlayer!.rowDestination, andColumn: selectMoveHumanPlayer!.columnDestination)
+        
+        print(playerBoard)
+        
+        playerRules.playedMove(selectMoveHumanPlayer!, on: preMovePlayerBoard, resultingBoard: playerBoard)
+        
+        winningReason = try playerRules.isGameOver(on: playerBoard, lastMoveRow: selectMoveHumanPlayer!.rowDestination, lastMoveColumn: selectMoveHumanPlayer!.columnDestination)
+        print(winningReason)
+    }
 }

@@ -17,7 +17,7 @@ public protocol Rules: Hashable {
     ///
     /// - Parameter board: Le plateau de jeu à vérifier.
     /// - Returns: Une erreur d'invalidité du plateau s'il y en a une, sinon `.noError`.
-    static func checkBoard(_ board: Board) -> InvalidBoardError
+    static func checkBoard(_ board: Board) throws -> Bool
     
     /// Obtient le joueur suivant dans la séquence du tour de jeu.
     ///
@@ -51,7 +51,7 @@ public protocol Rules: Hashable {
     ///   - destinationRow: La ligne de destination du mouvement.
     ///   - destinationColumn: La colonne de destination du mouvement.
     /// - Returns: `true` si le mouvement est valide, sinon `false`.
-    func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) -> Bool
+    func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) throws -> Bool
     
     /// Vérifie si un mouvement spécifique est valide sur le plateau donné.
     ///
@@ -59,7 +59,7 @@ public protocol Rules: Hashable {
     ///   - board: Le plateau de jeu actuel.
     ///   - move: Le mouvement à vérifier.
     /// - Returns: `true` si le mouvement est valide, sinon `false`.
-    func isMoveValid(on board: Board, move: Move) -> Bool
+    func isMoveValid(on board: Board, move: Move) throws -> Bool
     
     /// Vérifie si la partie est terminée sur le plateau donné après un certain mouvement.
     ///
@@ -68,7 +68,7 @@ public protocol Rules: Hashable {
     ///   - lastMoveRow: La ligne du dernier mouvement.
     ///   - lastMoveColumn: La colonne du dernier mouvement.
     /// - Returns: Un tuple indiquant si la partie est terminée et le résultat de la partie.
-    func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) -> (Bool, Result)
+    func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) throws -> (Bool, Result)
     
     /// Met à jour l'état du plateau après un mouvement effectué.
     ///

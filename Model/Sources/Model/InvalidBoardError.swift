@@ -22,7 +22,4 @@ public enum InvalidBoardError: Error, Hashable {
     
     /// Erreur d'autorisation d'animal sur le plateau.
     case animalNotAuthorized
-    
-    /// Aucune erreur détectée.
-    case noError
 }
