@@ -12,7 +12,7 @@ public struct VerySimpleRules: Rules {
     /// Crée un nouveau plateau de jeu initial.
     ///
     /// - Returns: Un nouveau plateau de jeu.
-    public static func createBoard() -> Board {
+    public func createBoard() -> Board {
         let jungleEmptyCell: Cell = Cell(cellType: .jungle)
         let denEmptyCellJ1: Cell = Cell(cellType: .den, initialOwner: .player1)
         let denEmptyCellJ2: Cell = Cell(cellType: .den, initialOwner: .player2)
