@@ -138,6 +138,7 @@ do {
 
 // PLAYER - COMMAND LINE TOOLS
 
+
 var playerRules: VerySimpleRules = VerySimpleRules()
 var playerBoard: Board = VerySimpleRules.createBoard()
 var selectedPiece: Piece
@@ -154,14 +155,15 @@ private func inputHumanMethod(humanPlayer: HumanPlayer) -> Move? {
     
     if let selectedIndex = readLine(), let index = Int(selectedIndex), index > 0, index <= moves.count {
         let selectedMove = moves[index - 1]
-        print("Vous avez choisi le déplacement numéro \(selectedIndex): \(selectedMove.description)")
+        //print("Vous avez choisi le déplacement numéro \(selectedIndex): \(selectedMove.description)")
         return selectedMove
     } else {
-        print("Choix invalide.")
+        //print("Choix invalide.")
         return nil
     }
 }
 
+/* UNCOMMENT TO TRY A GAME MANUALLY
 //Plateau de départ
 print(playerBoard)
 
@@ -218,3 +220,14 @@ while(winningReason == (false, .notFinished)){
         print(winningReason)
     }
 }
+*/
+
+
+// GAME - COMMAND LINE TOOLS
+
+var verySimpleRules: VerySimpleRules = VerySimpleRules()
+let randomPlayer: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
+let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
+
+var game = Game(withRules: verySimpleRules, andPlayer1: randomPlayer, andPlayer2: humanPlayer)
+try game.start()

@@ -11,7 +11,7 @@ public protocol Rules: Hashable {
     /// Crée un nouveau plateau de jeu initial.
     ///
     /// - Returns: Un nouveau plateau de jeu.
-    func createBoard() -> Board
+    static func createBoard() -> Board
     
     /// Vérifie si le plateau de jeu est valide.
     ///
