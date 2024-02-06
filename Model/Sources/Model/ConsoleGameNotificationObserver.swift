@@ -25,7 +25,7 @@ public struct ConsoleGameNotificationObserver: GameNotificationObserver {
     
     public func moveNotValidated(move: Move?) {
         print("**************************************")
-        print("**************************************")
+        print("Move invalid, please try again !")
         print("**************************************")
     }
     

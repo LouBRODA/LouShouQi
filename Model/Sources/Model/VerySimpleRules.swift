@@ -210,10 +210,9 @@ public struct VerySimpleRules: Rules {
         }
         
         //vérifier si le déplacement n'est pas supérieur à une case
-        if abs(originRow - destinationRow) <= 0 && abs(originRow - destinationRow) >= 1 &&
-           abs(originColumn - destinationColumn) <= 0 && abs(originColumn - destinationColumn) >= 1 &&
-            abs(originRow - destinationRow) + abs(originColumn - destinationColumn) != 0 &&
-            abs(originRow - destinationRow) + abs(originColumn - destinationColumn) != 2 {
+        if abs(originRow - destinationRow) <= 1 && abs(originColumn - destinationColumn) <= 1 &&
+            (abs(originRow - destinationRow) + abs(originColumn - destinationColumn) == 1) {
+        } else {
             throw GameError.invalidMove
         }
         

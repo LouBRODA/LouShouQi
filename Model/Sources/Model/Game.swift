@@ -85,7 +85,8 @@ public struct Game {
                             notifyMoveNotValidated(move: move)
                         }
                     } catch {
-                        
+                        notifyMoveNotValidated(move: selectMove)
+                        selectMove = nil
                     }
                 }
                 else {
@@ -109,5 +110,6 @@ public struct Game {
             }
         }
         notifyGameOver(winningResult: winningReason, player: nextPlayer)
+        notifyBoardChanged(board: board)
     }
 }

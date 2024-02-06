@@ -146,21 +146,32 @@ var winningReason: (Bool, Result) = (false, .notFinished)
 
 //Input méthode pour le HumanPlayer
 private func inputHumanMethod(humanPlayer: HumanPlayer) -> Move? {
-    let moves = rules.getMoves(for: playerBoard, of: humanPlayer.id)
-    print("Choisissez un déplacement :")
-    
-    for (index, move) in moves.enumerated() {
-        print("\(index + 1). \(move.description)")
-    }
-    
-    if let selectedIndex = readLine(), let index = Int(selectedIndex), index > 0, index <= moves.count {
-        let selectedMove = moves[index - 1]
-        //print("Vous avez choisi le déplacement numéro \(selectedIndex): \(selectedMove.description)")
-        return selectedMove
-    } else {
-        //print("Choix invalide.")
+    print("Entrez la ligne de départ de la pièce :")
+    guard let rowOriginStr = readLine(), let rowOrigin = Int(rowOriginStr) else {
+        print("Ligne de départ invalide.")
         return nil
     }
+    
+    print("Entrez la colonne de départ de la pièce :")
+    guard let columnOriginStr = readLine(), let columnOrigin = Int(columnOriginStr) else {
+        print("Colonne de départ invalide.")
+        return nil
+    }
+    
+    print("Entrez la ligne de destination de la pièce :")
+    guard let rowDestinationStr = readLine(), let rowDestination = Int(rowDestinationStr) else {
+        print("Ligne de destination invalide.")
+        return nil
+    }
+    
+    print("Entrez la colonne de destination de la pièce :")
+    guard let columnDestinationStr = readLine(), let columnDestination = Int(columnDestinationStr) else {
+        print("Colonne de destination invalide.")
+        return nil
+    }
+    
+    let move = Move(owner: humanPlayer.id, rowOrigin: rowOrigin, columnOrigin: columnOrigin, rowDestination: rowDestination, columnDestination: columnDestination)
+    return move
 }
 
 /* UNCOMMENT TO TRY A GAME MANUALLY
@@ -227,9 +238,20 @@ while(winningReason == (false, .notFinished)){
 
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let randomPlayer: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
+let randomPlayer2: RandomPlayer = RandomPlayer(withName: "RandomPlayer2", andId: .player2)!
+
+var game = Game(withRules: verySimpleRules, andPlayer1: randomPlayer, andPlayer2: randomPlayer2)
+let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
+game.addObserver(consoleGameNotificationObserver)
+try game.start()
+
+/* UNCOMMENT TO PLAY AGAINST A RANDOM PLAYER
+var verySimpleRules: VerySimpleRules = VerySimpleRules()
+let randomPlayer: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
 let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
 
 var game = Game(withRules: verySimpleRules, andPlayer1: randomPlayer, andPlayer2: humanPlayer)
 let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
 game.addObserver(consoleGameNotificationObserver)
 try game.start()
+*/
