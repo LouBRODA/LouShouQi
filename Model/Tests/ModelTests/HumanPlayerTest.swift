@@ -19,7 +19,7 @@ final class HumanPlayerTest: XCTestCase {
 
     // Test d'initialisation de la classe HumanPlayer
     func testHumanPlayerInitialization() {
-        let humanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: { Move(owner: .player2, rowOrigin: 0, columnOrigin: 0, rowDestination: 0, columnDestination: 1) })
+        let humanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: { _ in Move(owner: .player2, rowOrigin: 0, columnOrigin: 0, rowDestination: 0, columnDestination: 1) })
         
         XCTAssertNotNil(humanPlayer, "ERR : La création du HumanPlayer a échoué !")
         XCTAssertEqual(humanPlayer?.name, "Lou", "ERR : Le nom du HumanPlayer est incorrect ")
@@ -28,7 +28,7 @@ final class HumanPlayerTest: XCTestCase {
     
     // Test de la méthode chooseMove avec une instance HumanPlayer
     func testHumanPlayerChooseMove(){
-        let humanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: { Move(owner: .player2, rowOrigin: 0, columnOrigin: 0, rowDestination: 0, columnDestination: 1) })
+        let humanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: { _ in Move(owner: .player2, rowOrigin: 0, columnOrigin: 0, rowDestination: 0, columnDestination: 1) })
         let move = humanPlayer?.chooseMove(in: board, with: rules)
         
         XCTAssertNotNil(move, "ERR : Move est nil !")

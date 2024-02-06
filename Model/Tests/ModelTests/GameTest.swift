@@ -4,26 +4,63 @@ import Model
 final class GameTest: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testGameStarts() {
+        let player1 = RandomPlayer(withName: "PlayerTest", andId: .player1)!
+        let player2 = RandomPlayer(withName: "PlayerTest", andId: .player2)!
+        var game = Game(withRules: VerySimpleRules(), andPlayer1: player1, andPlayer2: player2)
+        
+        let observer = MockGameNotificationObserver()
+        game.addObserver(observer)
+        
+        do {
+            try game.start()
+        } catch {
+            XCTFail("Erreur dans la méthode start de Game !")
         }
+        
+        XCTAssertTrue(observer.gameStartedCalled)
+        XCTAssertTrue(observer.playerNotifiedCalled)
+        XCTAssertTrue(observer.movePlayedCalled)
+        XCTAssertTrue(observer.gameOverCalled)
+        XCTAssertTrue(observer.boardChangedCalled)
+    }
+}
+
+class MockGameNotificationObserver: GameNotificationObserver {
+    var gameStartedCalled = false
+    var playerNotifiedCalled = false
+    var movePlayedCalled = false
+    var moveNotValidatedCalled = false
+    var gameOverCalled = false
+    var boardChangedCalled = false
+    
+    func gameStarted() {
+        gameStartedCalled = true
+    }
+    
+    func playerNotified(player: Player) {
+        playerNotifiedCalled = true
+    }
+    
+    func movePlayed(move: Move) {
+        movePlayedCalled = true
+    }
+    
+    func moveNotValidated(move: Move?) {
+        moveNotValidatedCalled = true
+    }
+    
+    func gameOver(winningResult: (Bool, Result), player: Player) {
+        gameOverCalled = true
+    }
+    
+    func boardChanged(board: Board) {
+        boardChangedCalled = true
     }
 
 }
