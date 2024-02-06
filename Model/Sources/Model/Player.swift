@@ -1,7 +1,18 @@
 import Foundation
 
 /// Classe définissant un joueur.
-public class Player {
+public class Player: CustomStringConvertible {
+    // Description textuelle de l'objet Player.
+    public var description: String {
+        switch self.id {
+        case .noOne:
+            return "x"
+        case .player1:
+            return "player1"
+        case .player2:
+            return "player2"
+        }
+    }
     
     // Identifiant du joueur de type Owner.
     public let id: Owner

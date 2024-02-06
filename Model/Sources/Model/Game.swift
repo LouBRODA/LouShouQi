@@ -54,7 +54,9 @@ public struct Game {
     public mutating func start() throws{
         var selectedPiece: Piece
         var winningReason: (Bool, Result) = (false, .notFinished)
-                
+        var nextPlayer: Player
+        nextPlayer = player1
+        
         notifyGameStarted()
         
         while(winningReason == (false, .notFinished)){
@@ -62,7 +64,6 @@ public struct Game {
             notifyBoardChanged(board: board)
             
             let nextOwner = rules.getNextPlayer()
-            let nextPlayer: Player
             let preMovePlayerBoard = board
             
             if (nextOwner == player1.id) {
@@ -91,7 +92,7 @@ public struct Game {
                     notifyMoveNotValidated(move: selectMove)
                 }
             } while selectMove == nil
-            
+                        
             if let move = selectMove {
                 selectedPiece = board.grid[move.rowOrigin][move.columnOrigin].piece!
                 _ = board.removePiece(atRow: move.rowOrigin, andColumn: move.columnOrigin)
@@ -105,9 +106,8 @@ public struct Game {
                 rules.playedMove(move, on: preMovePlayerBoard, resultingBoard: board)
                 
                 winningReason = try rules.isGameOver(on: board, lastMoveRow: move.rowDestination, lastMoveColumn: move.columnDestination)
-                
-                notifyGameOver(winningResult: winningReason, player: nextPlayer)
             }
         }
+        notifyGameOver(winningResult: winningReason, player: nextPlayer)
     }
 }

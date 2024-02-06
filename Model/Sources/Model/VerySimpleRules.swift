@@ -204,7 +204,7 @@ public struct VerySimpleRules: Rules {
         
         //vérifier si la cellule de destination ne correspond pas à la tanière du joueur actuel
         if destinationCell.cellType == .den {
-            if destinationCell.initialOwner != getNextPlayer(){
+            if destinationCell.initialOwner == originCell.piece?.owner{
                 throw GameError.invalidMove
             }
         }
@@ -240,13 +240,10 @@ public struct VerySimpleRules: Rules {
     /// - Returns: Un tuple indiquant si la partie est terminée et le résultat de la partie.
     public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) throws -> (Bool, Result) {
         //vérifier si un joueur a atteint la tannière de l'adversaire
-        let lastMoveCell = board.grid[lastMoveRow][lastMoveColumn]
-        if lastMoveCell.cellType == .den {
-            let currentPlayer = getNextPlayer()
-            let opponent = (currentPlayer == .player1) ? Owner.player2 : Owner.player1
-            guard lastMoveCell.piece?.owner != opponent else {
-                return (true, .winner(owner: opponent, .denReached))
-            }
+        let currentPlayer = getNextPlayer()
+        let opponent = (currentPlayer == .player1) ? Owner.player2 : Owner.player1
+        if board.grid[lastMoveRow][lastMoveColumn].cellType == .den && board.grid[lastMoveRow][lastMoveColumn].piece?.owner == opponent {
+            return (true, .winner(owner: currentPlayer, .denReached))
         }
         
         //vérifier si un joueur a mangé toutes les pièces de l'adversaire
@@ -256,7 +253,6 @@ public struct VerySimpleRules: Rules {
         }
 
         //vérifier si l'adversaire ne peut pas faire le moindre mouvement
-        let opponent = (getNextPlayer() == .player1) ? Owner.player2 : Owner.player1
         let availableMoves = getMoves(for: board, of: opponent)
         return availableMoves.isEmpty ? (true, .winner(owner: opponent, .noMovesLeft)) : (false, .notFinished)
     }
