@@ -230,4 +230,6 @@ let randomPlayer: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .
 let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
 
 var game = Game(withRules: verySimpleRules, andPlayer1: randomPlayer, andPlayer2: humanPlayer)
+let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
+game.addObserver(consoleGameNotificationObserver)
 try game.start()

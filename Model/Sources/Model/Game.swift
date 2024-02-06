@@ -18,7 +18,7 @@ public struct Game {
     }
     
     //Méthodes de gestion des observers
-    mutating func addObserver(_ observer: GameNotificationObserver){
+    public mutating func addObserver(_ observer: GameNotificationObserver){
         observers.append(observer)
     }
     
@@ -38,7 +38,7 @@ public struct Game {
         observers.forEach { $0.movePlayed(move: move) }
     }
     
-    public func notifyMoveNotValidated(move: Move) {
+    public func notifyMoveNotValidated(move: Move?) {
         observers.forEach { $0.moveNotValidated(move: move) }
     }
 
@@ -54,7 +54,7 @@ public struct Game {
     public mutating func start() throws{
         var selectedPiece: Piece
         var winningReason: (Bool, Result) = (false, .notFinished)
-        
+                
         notifyGameStarted()
         
         while(winningReason == (false, .notFinished)){
@@ -86,6 +86,9 @@ public struct Game {
                     } catch {
                         
                     }
+                }
+                else {
+                    notifyMoveNotValidated(move: selectMove)
                 }
             } while selectMove == nil
             
