@@ -216,11 +216,6 @@ public struct VerySimpleRules: Rules {
             throw GameError.invalidMove
         }
         
-        //vérifier si la pièce d'origine appartient au joueur actuel
-        //if let piece = originCell.piece {
-        //    throw GameError.invalidMove
-        //}
-        
         return true
     }
     

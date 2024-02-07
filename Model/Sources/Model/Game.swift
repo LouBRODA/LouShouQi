@@ -79,14 +79,10 @@ public struct Game {
             repeat {
                 selectMove = nextPlayer.chooseMove(in: board, with: rules)
                 if let move = selectMove {
-                    do {
-                        let isValidMove = try rules.isMoveValid(on: board, move: move)
-                        if !isValidMove {
-                            notifyMoveNotValidated(move: move)
-                        }
-                    } catch {
-                        notifyMoveNotValidated(move: selectMove)
+                    let possibleMoves = rules.getMoves(for: board, of: nextPlayer.id)
+                    if !possibleMoves.contains(move){
                         selectMove = nil
+                        notifyMoveNotValidated(move: selectMove)
                     }
                 }
                 else {
