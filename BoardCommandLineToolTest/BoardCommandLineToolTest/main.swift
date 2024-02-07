@@ -236,15 +236,17 @@ while(winningReason == (false, .notFinished)){
 
 // GAME - COMMAND LINE TOOLS
 
+/* UNCOMMENT TO WATCH A RANDOM PLAYER GAME
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let randomPlayer: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
 let randomPlayer2: RandomPlayer = RandomPlayer(withName: "RandomPlayer2", andId: .player2)!
 
-var game = Game(withRules: verySimpleRules, andPlayer1: randomPlayer, andPlayer2: randomPlayer2)
+var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: randomPlayer2)
 let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
 game.addObserver(consoleGameNotificationObserver)
 try game.start()
-
+*/
+ 
 /* UNCOMMENT TO PLAY AGAINST A RANDOM PLAYER
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let randomPlayer: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
@@ -255,3 +257,12 @@ let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
 game.addObserver(consoleGameNotificationObserver)
 try game.start()
 */
+
+var verySimpleRules: VerySimpleRules = VerySimpleRules()
+let iAPlayer: IAPlayer = IAPlayer(withName: "IAPlayer", andId: .player1)!
+let randomPlayer2: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player2)!
+
+var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: randomPlayer2)
+let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
+game.addObserver(consoleGameNotificationObserver)
+try game.start()

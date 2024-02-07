@@ -29,17 +29,50 @@ public class IAPlayer : Player {
         }
         
         //regarder si l'on peut atteindre la tanière adversaire
-        
+        for move in availableMoves {
+            // Vérifier si la destination du mouvement est une tanière
+            if case board.grid[move.rowDestination][move.columnDestination].cellType = .den {
+                return move
+            }
+        }
         
         //regarder si l'on peut atteindre une pièce de force inférieure ou égale
-        
+        for move in availableMoves {
+            if let opponentPiece = board.grid[move.rowDestination][move.columnDestination].piece, let piece = board.grid[move.rowOrigin][move.columnOrigin].piece {
+                if !(piece.animal.rawValue == 8 && opponentPiece.animal.rawValue == 1) && piece.animal.rawValue >= opponentPiece.animal.rawValue {
+                    return move
+                }
+            }
+        }
 
         //déplacer une pièce menacée par une pièce adverse adjacente de force supérieure ou égale
-        
+        for move in availableMoves {
+            // Coordonnées des cellules adjacentes
+            let adjacentCells = [(move.rowDestination - 1, move.columnDestination),
+                                 (move.rowDestination + 1, move.columnDestination),
+                                 (move.rowDestination, move.columnDestination - 1),
+                                 (move.rowDestination, move.columnDestination + 1)]
+            
+            // Vérifier chaque cellule adjacente
+            for (row, column) in adjacentCells {
+                // Vérifier si la cellule est dans les limites du plateau
+                guard row >= 0 && row < board.nbRows && column >= 0 && column < board.nbColumns else {
+                    continue
+                }
+                
+                let adjacentCell = board.grid[row][column]
+                
+                // Vérifier si la cellule adjacente contient une pièce adverse
+                if let opponentPiece = adjacentCell.piece, let piece = board.grid[move.rowOrigin][move.columnOrigin].piece, opponentPiece.owner != self.id {
+                    if !(piece.animal.rawValue == 8 && opponentPiece.animal.rawValue == 1) && piece.animal.rawValue >= opponentPiece.animal.rawValue {
+                        return move
+                    }
+                }
+            }
+        }
         
         //éviter de se placer à côté d'une pièce de force supérieure ou égale
 
-        
-        return nil
+        return availableMoves.randomElement()
     }
 }
