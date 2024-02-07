@@ -1,5 +1,6 @@
 import Foundation
 
+/// Protocole définissant les différentes notifications à implémenter
 public protocol GameNotificationObserver {
     func gameStarted() -> Void
     func playerNotified(player: Player) -> Void
