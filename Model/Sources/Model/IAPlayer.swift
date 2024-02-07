@@ -28,6 +28,9 @@ public class IAPlayer : Player {
             return nil
         }
         
+        //regarder si l'on peut atteindre la tanière adversaire
+        
+        
         //regarder si l'on peut atteindre une pièce de force inférieure ou égale
         
 
