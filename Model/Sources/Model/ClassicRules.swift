@@ -1,26 +1,32 @@
 import Foundation
 
-public struct VerySimpleRules: Rules {
+public struct ClassicRules: Rules {
     public var occurrences: [Board:Int] = [:]
     public var historic: [Move] = []
-    public static let expectedRows = 5
-    public static let expectedColumns = 5
+    public static let expectedRows = 10
+    public static let expectedColumns = 7
     
     /// Initialiseur des règles simplifiées.
     public init() { }
     
-    /// Crée un nouveau plateau de jeu initial.
-    ///
-    /// - Returns: Un nouveau plateau de jeu.
     public static func createBoard() -> Board {
         let jungleEmptyCell: Cell = Cell(cellType: .jungle)
+        let waterEmptyCell: Cell = Cell(cellType: .water)
         let denEmptyCellJ1: Cell = Cell(cellType: .den, initialOwner: .player1)
         let denEmptyCellJ2: Cell = Cell(cellType: .den, initialOwner: .player2)
+        let trapEmptyCellJ1: Cell = Cell(cellType: .trap, initialOwner: .player1)
+        let trapEmptyCellJ2: Cell = Cell(cellType: .trap, initialOwner: .player2)
 
         let ratJ1: Piece = Piece(owner: .player1, animal: .rat)
         let ratJ2: Piece = Piece(owner: .player2, animal: .rat)
         let catJ1: Piece = Piece(owner: .player1, animal: .cat)
         let catJ2: Piece = Piece(owner: .player2, animal: .cat)
+        let dogJ1: Piece = Piece(owner: .player1, animal: .dog)
+        let dogJ2: Piece = Piece(owner: .player2, animal: .dog)
+        let wolfJ1: Piece = Piece(owner: .player1, animal: .wolf)
+        let wolfJ2: Piece = Piece(owner: .player2, animal: .wolf)
+        let leopardJ1: Piece = Piece(owner: .player1, animal: .leopard)
+        let leopardJ2: Piece = Piece(owner: .player2, animal: .leopard)
         let tigerJ1: Piece = Piece(owner: .player1, animal: .tiger)
         let tigerJ2: Piece = Piece(owner: .player2, animal: .tiger)
         let lionJ1: Piece = Piece(owner: .player1, animal: .lion)
@@ -32,6 +38,12 @@ public struct VerySimpleRules: Rules {
         let ratJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: ratJ2.owner, piece: ratJ2)
         let catJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: catJ1.owner, piece: catJ1)
         let catJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: catJ1.owner, piece: catJ2)
+        let dogJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: dogJ1.owner, piece: dogJ1)
+        let dogJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: dogJ2.owner, piece: dogJ2)
+        let wolfJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: wolfJ1.owner, piece: wolfJ1)
+        let wolfJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: wolfJ2.owner, piece: wolfJ2)
+        let leopardJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: leopardJ1.owner, piece: leopardJ1)
+        let leopardJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: leopardJ2.owner, piece: leopardJ2)
         let tigerJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: tigerJ1.owner, piece: tigerJ1)
         let tigerJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: tigerJ2.owner, piece: tigerJ2)
         let lionJ1StartingCell : Cell = Cell(cellType: .jungle, initialOwner: lionJ1.owner, piece: lionJ1)
@@ -40,19 +52,20 @@ public struct VerySimpleRules: Rules {
         let elephantJ2StartingCell : Cell = Cell(cellType: .jungle, initialOwner: elephantJ2.owner, piece: elephantJ2)
         
         let initialBoard: Board = Board(withGrid: [
-        [jungleEmptyCell, lionJ1StartingCell, denEmptyCellJ1, tigerJ1StartingCell, jungleEmptyCell],
-        [ratJ1StartingCell, jungleEmptyCell, catJ1StartingCell, jungleEmptyCell, elephantJ1StartingCell],
-        [jungleEmptyCell, jungleEmptyCell, jungleEmptyCell, jungleEmptyCell, jungleEmptyCell],
-        [elephantJ2StartingCell, jungleEmptyCell, catJ2StartingCell, jungleEmptyCell, ratJ2StartingCell],
-        [jungleEmptyCell, tigerJ2StartingCell, denEmptyCellJ2, lionJ2StartingCell, jungleEmptyCell],
-        ])!;
+            [lionJ1StartingCell, jungleEmptyCell, trapEmptyCellJ1, denEmptyCellJ1, trapEmptyCellJ1, jungleEmptyCell, tigerJ1StartingCell],
+            [jungleEmptyCell, dogJ1StartingCell, jungleEmptyCell, trapEmptyCellJ1, jungleEmptyCell, catJ1StartingCell, jungleEmptyCell],
+            [ratJ1StartingCell, jungleEmptyCell, leopardJ1StartingCell, jungleEmptyCell, wolfJ1StartingCell, jungleEmptyCell, elephantJ1StartingCell],
+            [jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell],
+            [jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell],
+            [jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell],
+            [jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell, waterEmptyCell, waterEmptyCell, jungleEmptyCell],
+            [elephantJ2StartingCell, jungleEmptyCell, wolfJ2StartingCell, jungleEmptyCell, leopardJ2StartingCell, jungleEmptyCell, ratJ2StartingCell],
+            [jungleEmptyCell, catJ2StartingCell, jungleEmptyCell, trapEmptyCellJ2, jungleEmptyCell, dogJ2StartingCell, jungleEmptyCell],
+            [tigerJ2StartingCell, jungleEmptyCell, trapEmptyCellJ2, denEmptyCellJ2, trapEmptyCellJ2, jungleEmptyCell, lionJ2StartingCell]
+        ])!        
         return initialBoard;
     }
     
-    /// Vérifie si le plateau de jeu est valide.
-    ///
-    /// - Parameter board: Le plateau de jeu à vérifier.
-    /// - Returns: Une erreur d'invalidité du plateau s'il y en a une, sinon `.noError`.
     public static func checkBoard(_ board: Board) throws -> Bool {
         //vérifier le nombre de lignes et de colonnes
         guard board.nbRows == expectedRows && board.nbColumns == expectedColumns else {
@@ -60,29 +73,19 @@ public struct VerySimpleRules: Rules {
         }
         
         //vérifier l'emplacement de la niche du joueur 1 sur le board
-        guard board.grid[0][2].cellType == CellType.den else {
-            throw InvalidBoardError.badCellType(cellType: .den, row: 0, column: 2)
+        guard board.grid[0][3].cellType == CellType.den else {
+            throw InvalidBoardError.badCellType(cellType: .den, row: 0, column: 3)
         }
         
         //vérifier l'emplacement de la niche du joueur 2 sur le board
-        guard board.grid[4][2].cellType == CellType.den else {
-            throw InvalidBoardError.badCellType(cellType: .den, row: 4, column: 2)
+        guard board.grid[9][3].cellType == CellType.den else {
+            throw InvalidBoardError.badCellType(cellType: .den, row: 9, column: 3)
         }
         
         //vérifier le nombre de pièces de chaque joueur
-        guard board.countOnePlayerPieces(of: .player1) < 6 &&
-                board.countOnePlayerPieces(of: .player2) < 6 else {
+        guard board.countOnePlayerPieces(of: .player1) < 9 &&
+                board.countOnePlayerPieces(of: .player2) < 9 else {
             throw InvalidBoardError.numberOfPiece(piecesPlayer1: board.countOnePlayerPieces(of: .player1), piecesPlayer2: board.countOnePlayerPieces(of: .player2))
-        }
-        
-        //vérifier que les types d'animaux (wolf et leopard) ne sont pas présents sur le board
-        guard !board.grid.flatMap({ $0 }).contains(where: { $0.piece?.animal == .wolf || $0.piece?.animal == .leopard || $0.piece?.animal == .dog }) else {
-            throw InvalidBoardError.animalNotAuthorized
-        }
-        
-        //vérifier qu'il n'y a pas de cases de type eau sur le plateau
-        guard !board.grid.flatMap({ $0 }).contains(where: { $0.cellType == .water }) else {
-            throw InvalidBoardError.animalNotAuthorized
         }
         
         //vérifier qu'il n'y a au maximum qu'une occurence de chaque pièce
@@ -102,19 +105,10 @@ public struct VerySimpleRules: Rules {
         return true
     }
     
-    /// Obtient le joueur suivant dans la séquence du tour de jeu.
-    ///
-    /// - Returns: Le propriétaire du joueur suivant.
     public func getNextPlayer() -> Owner {
         return (historic.count % 2 == 0) ? .player1 : .player2
     }
     
-    /// Obtient la liste des mouvements possibles pour un joueur sur le plateau donné.
-    ///
-    /// - Parameters:
-    ///   - board: Le plateau de jeu actuel.
-    ///   - player: Le propriétaire du joueur pour lequel obtenir les mouvements.
-    /// - Returns: Une liste de mouvements possibles.
     public func getMoves(for board: Board, of player: Owner) -> [Move] {
         var availableMoves: [Move] = []
 
@@ -128,15 +122,8 @@ public struct VerySimpleRules: Rules {
         return availableMoves
     }
     
-    /// Obtient la liste des mouvements possibles pour un joueur à partir d'une position spécifique sur le plateau.
-    ///
-    /// - Parameters:
-    ///   - board: Le plateau de jeu actuel.
-    ///   - player: Le propriétaire du joueur pour lequel obtenir les mouvements.
-    ///   - row: La ligne de départ du mouvement.
-    ///   - column: La colonne de départ du mouvement.
-    /// - Returns: Une liste de mouvements possibles.
     public func getMoves(for board: Board, of player: Owner, fromRow row: Int, fromColumn column: Int) -> [Move] {
+        //TO REPLACE
         var availableMoves: [Move] = []
 
         //vérifier la validité des coordonnées données
@@ -170,16 +157,8 @@ public struct VerySimpleRules: Rules {
         return availableMoves
     }
     
-    /// Vérifie si un mouvement spécifique est valide sur le plateau donné.
-    ///
-    /// - Parameters:
-    ///   - board: Le plateau de jeu actuel.
-    ///   - originRow: La ligne de départ du mouvement.
-    ///   - originColumn: La colonne de départ du mouvement.
-    ///   - destinationRow: La ligne de destination du mouvement.
-    ///   - destinationColumn: La colonne de destination du mouvement.
-    /// - Returns: `true` si le mouvement est valide, sinon `false`.
     public func isMoveValid(on board: Board, fromRow originRow: Int, fromColumn originColumn: Int, toRow destinationRow: Int, toColumn destinationColumn: Int) throws -> Bool {
+        //TO REPLACE
         //vérifier la validité des coordonnées données
         guard originRow >= 0 && originRow < board.nbRows && originColumn >= 0 && originColumn < board.nbColumns &&
               destinationRow >= 0 && destinationRow < board.nbRows && destinationColumn >= 0 && destinationColumn < board.nbColumns else {
@@ -216,32 +195,14 @@ public struct VerySimpleRules: Rules {
             throw GameError.invalidMove
         }
         
-        //vérifier si la pièce d'origine appartient au joueur actuel
-        //if let piece = originCell.piece {
-        //    throw GameError.invalidMove
-        //}
-        
         return true
     }
     
-    /// Vérifie si un mouvement spécifique est valide sur le plateau donné.
-    ///
-    /// - Parameters:
-    ///   - board: Le plateau de jeu actuel.
-    ///   - move: Le mouvement à vérifier.
-    /// - Returns: `true` si le mouvement est valide, sinon `false`.
     public func isMoveValid(on board: Board, move: Move) throws -> Bool {
         //on utilise la méthode précédente avec les coordonées du Move
         return try isMoveValid(on: board, fromRow: move.rowOrigin, fromColumn: move.columnOrigin, toRow: move.rowDestination, toColumn: move.columnDestination)
     }
     
-    /// Vérifie si la partie est terminée sur le plateau donné après un certain mouvement.
-    ///
-    /// - Parameters:
-    ///   - board: Le plateau de jeu actuel.
-    ///   - lastMoveRow: La ligne du dernier mouvement.
-    ///   - lastMoveColumn: La colonne du dernier mouvement.
-    /// - Returns: Un tuple indiquant si la partie est terminée et le résultat de la partie.
     public func isGameOver(on board: Board, lastMoveRow: Int, lastMoveColumn: Int) throws -> (Bool, Result) {
         //vérifier si un joueur a atteint la tannière de l'adversaire
         let currentPlayer = getNextPlayer()
@@ -261,12 +222,6 @@ public struct VerySimpleRules: Rules {
         return availableMoves.isEmpty ? (true, .winner(owner: opponent, .noMovesLeft)) : (false, .notFinished)
     }
     
-    /// Met à jour l'état du plateau après un mouvement effectué.
-    ///
-    /// - Parameters:
-    ///   - move: Le mouvement joué.
-    ///   - currentBoard: Le plateau de jeu avant le mouvement.
-    ///   - resultingBoard: Le plateau de jeu après le mouvement.
     public mutating func playedMove(_ move: Move, on currentBoard: Board, resultingBoard: Board) {
         //Ajouter le dernier coup joué dans l'historique
         historic.append(move)

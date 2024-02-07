@@ -258,11 +258,23 @@ game.addObserver(consoleGameNotificationObserver)
 try game.start()
 */
 
+/* UNCOMMENT TO WATCH A RANDOM PLAYER VS IAPLAYER GAME
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let iAPlayer: IAPlayer = IAPlayer(withName: "IAPlayer", andId: .player1)!
 let randomPlayer2: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player2)!
 
 var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: randomPlayer2)
+let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
+game.addObserver(consoleGameNotificationObserver)
+try game.start()
+*/
+
+
+var verySimpleRules: VerySimpleRules = VerySimpleRules()
+let iAPlayer: IAPlayer = IAPlayer(withName: "IAPlayer", andId: .player1)!
+let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
+
+var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: humanPlayer)
 let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
 game.addObserver(consoleGameNotificationObserver)
 try game.start()
