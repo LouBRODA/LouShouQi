@@ -1,5 +1,6 @@
 import Foundation
 import Model
+import Persistence
 import ExtensionsTestsCli
 
 //CREATION BOARD TEST
@@ -269,7 +270,17 @@ game.addObserver(consoleGameNotificationObserver)
 try game.start()
 */
 
+/*
+let jsonEncoder = JSONEncoder()
+let jsonDecoder = JSONDecoder()
 
+let animal = Animal.cat
+let animalEncode = try jsonEncoder.encode(animal)
+print(animalEncode)
+let animalDecode = try jsonDecoder.decode(Animal.self, from: animalEncode)
+print(animalDecode)
+*/
+ 
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let iAPlayer: IAPlayer = IAPlayer(withName: "IAPlayer", andId: .player1)!
 let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!

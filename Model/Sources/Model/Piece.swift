@@ -15,7 +15,7 @@ public struct Piece: CustomStringConvertible, Hashable {
     /// Initialiseur de la structure `Piece`.
     ///
     /// - Parameters:
-    ///   - owner: Le propriétaire de la pièce.
+    ///   - owner: Le propriétaiare de la pièce.
     ///   - animal: L'animal associé à la pièce.
     public init(owner: Owner, animal: Animal) {
         self.owner = owner

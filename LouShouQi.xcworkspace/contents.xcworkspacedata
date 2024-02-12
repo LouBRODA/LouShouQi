@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Persistence">
+   </FileRef>
+   <FileRef
       location = "group:BoardCommandLineToolTest/BoardCommandLineToolTest.xcodeproj">
    </FileRef>
    <FileRef
