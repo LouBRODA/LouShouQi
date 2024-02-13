@@ -91,6 +91,78 @@ print(startingBoard.description)
 
 
 
+//PERSISTENCE - COMMAND LINE TESTS
+
+let jsonEncoder = JSONEncoder()
+let jsonDecoder = JSONDecoder()
+
+/*ANIMAL*/
+let cat = Animal.cat
+let catEncode = try jsonEncoder.encode(cat)
+if let catEncodeString = String(data: catEncode, encoding: .utf8){
+    print(catEncodeString)
+}
+let catDecode = try jsonDecoder.decode(Animal.self, from: catEncode)
+print(catDecode.rawValue)
+
+/*OWNER*/
+let player1 = Owner.player1
+let player1Encode = try jsonEncoder.encode(player1)
+if let player1EncodeString = String(data: player1Encode, encoding: .utf8){
+    print(player1EncodeString)
+}
+let player1Decode = try jsonDecoder.decode(Owner.self, from: player1Encode)
+print(player1Decode.description)
+
+/*CELLTYPE*/
+let jungle = CellType.jungle
+let jungleEncode = try jsonEncoder.encode(jungle)
+if let jungleEncodeString = String(data: jungleEncode, encoding: .utf8){
+    print(jungleEncodeString)
+}
+let jungleDecode = try jsonDecoder.decode(CellType.self, from: jungleEncode)
+print(jungleDecode)
+
+/*CELL*/
+let ratJ1StartingCellTest : Cell = Cell(cellType: .jungle, initialOwner: ratJ1.owner, piece: ratJ1)
+let ratJ1StartingCellTestEncode = try jsonEncoder.encode(ratJ1StartingCellTest)
+if let ratJ1StartingCellTestEncodeString = String(data: ratJ1StartingCellTestEncode, encoding: .utf8){
+    print(ratJ1StartingCellTestEncodeString)
+}
+let ratJ1StartingCellTestDecode = try jsonDecoder.decode(Cell.self, from: ratJ1StartingCellTestEncode)
+print(ratJ1StartingCellTestDecode)
+
+/*MOVE*/
+let moveJ1Test : Move = Move(owner: .player1, rowOrigin: 0, columnOrigin: 0, rowDestination: 0, columnDestination: 1)
+let moveJ1TestEncode = try jsonEncoder.encode(moveJ1Test)
+if let moveJ1TestEncodeString = String(data: moveJ1TestEncode, encoding: .utf8){
+    print(moveJ1TestEncodeString)
+}
+let moveJ1TestDecode = try jsonDecoder.decode(Move.self, from: moveJ1TestEncode)
+print(moveJ1TestDecode)
+
+
+/*PIECE*/
+let ratPieceTest : Piece = Piece(owner: .player1, animal: .rat)
+let ratPieceTestEncode = try jsonEncoder.encode(ratPieceTest)
+if let ratPieceTestEncodeString = String(data: ratPieceTestEncode, encoding: .utf8){
+    print(ratPieceTestEncodeString)
+}
+let ratPieceTestDecode = try jsonDecoder.decode(Piece.self, from: ratPieceTestEncode)
+print(ratPieceTestDecode)
+
+/*BOARD*/
+let boardTest : Board = VerySimpleRules.createBoard()
+let boardTestEncode = try jsonEncoder.encode(boardTest)
+if let boardTestEncodeString = String(data: boardTestEncode, encoding: .utf8){
+    print(boardTestEncodeString)
+}
+let boardTestDecode = try jsonDecoder.decode(Board.self, from: boardTestEncode)
+print(boardTestDecode)
+
+
+
+
 //VERY SIMPLE RULES - COMMAND LINE TESTS
 
 //Création et affichage du Board
@@ -268,17 +340,6 @@ var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: ra
 let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
 game.addObserver(consoleGameNotificationObserver)
 try game.start()
-*/
-
-/*
-let jsonEncoder = JSONEncoder()
-let jsonDecoder = JSONDecoder()
-
-let animal = Animal.cat
-let animalEncode = try jsonEncoder.encode(animal)
-print(animalEncode)
-let animalDecode = try jsonDecoder.decode(Animal.self, from: animalEncode)
-print(animalDecode)
 */
  
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
