@@ -160,7 +160,27 @@ if let boardTestEncodeString = String(data: boardTestEncode, encoding: .utf8){
 let boardTestDecode = try jsonDecoder.decode(Board.self, from: boardTestEncode)
 print(boardTestDecode)
 
+/*RULES*/
+let verySimpleRulesTest: VerySimpleRules = VerySimpleRules()
+let rulesCodable = RulesCodable(occurrences: verySimpleRulesTest.occurrences, historic: verySimpleRulesTest.historic, rulesType: "VerySimpleRules")
+let rulesCodableEncode = try jsonEncoder.encode(rulesCodable)
+if let rulesCodableEncodeString = String(data: rulesCodableEncode, encoding: .utf8){
+    print(rulesCodableEncodeString)
+}
+let rulesCodableDecode = try jsonDecoder.decode(RulesCodable.self, from: rulesCodableEncode)
+let rulesDecode = verySimpleRulesTest.decodeRules(rulesCodable: rulesCodableDecode)
+print(rulesDecode)
 
+/*PLAYER*/
+let randomPlayerTest: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
+let playerCodable = PlayerCodable(id: randomPlayerTest.id, name: randomPlayerTest.name, playerType: "RandomPlayer")
+let playerCodableEncode = try jsonEncoder.encode(playerCodable)
+if let playerCodableEncodeString = String(data: playerCodableEncode, encoding: .utf8){
+    print(playerCodableEncodeString)
+}
+let playerCodableDecode = try jsonDecoder.decode(PlayerCodable.self, from: playerCodableEncode)
+let playerDecode = randomPlayerTest.decodePlayer(playerCodable: playerCodableDecode)
+print(playerDecode)
 
 
 //VERY SIMPLE RULES - COMMAND LINE TESTS
