@@ -194,7 +194,7 @@ if let gameTestEncodeString = String(data: gameTestEncode, encoding: .utf8){
 let gameTestDecode = try jsonDecoder.decode(Game.self, from: gameTestEncode)
 print(gameTestDecode)
 
-
+try await GameFileManager.saveGame(withName: "test", andGame: gameTest)
 
 //VERY SIMPLE RULES - COMMAND LINE TESTS
 

@@ -1,5 +1,6 @@
 import Foundation
-/*
+import Model
+
 public struct GameFileManager {
     
     public static func getSaveDirectoryUrl() throws -> URL {
@@ -14,9 +15,11 @@ public struct GameFileManager {
         return baseUrl
     }
     
+    
+    @available(macOS 10.15, *)
     public static func loadGame(withName name: String) async throws -> Game? {
         let task = Task<Game?, Error> {
-            let fileUrl = try self.getSaveDirectoryUrl().appending(path: name)
+            let fileUrl = try self.getSaveDirectoryUrl().appendingPathComponent(name).appendingPathExtension("json")
             guard let data = try? Data(contentsOf: fileUrl) else {
                 return nil
             }
@@ -27,11 +30,12 @@ public struct GameFileManager {
         
     }
     
+    @available(macOS 10.15, *)
     public static func saveGame(withName name: String, andGame game: Game) async throws {
         let task = Task {
             do {
                 let data = try JSONEncoder().encode(game)
-                let outfile = try Self.fileURL.appending(path: name)
+                let outfile = try getSaveDirectoryUrl().appendingPathComponent(name).appendingPathExtension("json")
                 try data.write(to: outfile)
             }
             catch {
@@ -40,4 +44,3 @@ public struct GameFileManager {
         _ = try await task.value
     }
 }
-*/
