@@ -8,4 +8,5 @@ public protocol GameNotificationObserver {
     func moveNotValidated(move: Move?) -> Void
     func gameOver(winningResult: (Bool, Result), player: Player) -> Void
     func boardChanged(board: Board) -> Void
+    func gameSaved(game: Game) -> Void
 }

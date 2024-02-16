@@ -31,16 +31,13 @@ public struct GameFileManager {
     }
     
     @available(macOS 10.15, *)
-    public static func saveGame(withName name: String, andGame game: Game) async throws {
-        let task = Task {
-            do {
-                let data = try JSONEncoder().encode(game)
-                let outfile = try getSaveDirectoryUrl().appendingPathComponent(name).appendingPathExtension("json")
-                try data.write(to: outfile)
-            }
-            catch {
-            }
+    public static func saveGame(withName name: String, andGame game: Game) throws {
+        do {
+            let data = try JSONEncoder().encode(game)
+            let outfile = try getSaveDirectoryUrl().appendingPathComponent(name).appendingPathExtension("json")
+            try data.write(to: outfile)
         }
-        _ = try await task.value
+        catch {
+        }
     }
 }

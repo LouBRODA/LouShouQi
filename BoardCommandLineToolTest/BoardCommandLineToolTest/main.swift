@@ -194,7 +194,7 @@ if let gameTestEncodeString = String(data: gameTestEncode, encoding: .utf8){
 let gameTestDecode = try jsonDecoder.decode(Game.self, from: gameTestEncode)
 print(gameTestDecode)
 
-try await GameFileManager.saveGame(withName: "test", andGame: gameTest)
+//try await GameFileManager.saveGame(withName: "test", andGame: gameTest)
 
 //VERY SIMPLE RULES - COMMAND LINE TESTS
 
@@ -379,7 +379,26 @@ var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let iAPlayer: IAPlayer = IAPlayer(withName: "IAPlayer", andId: .player1)!
 let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
 
-var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: humanPlayer)
-let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
-game.addObserver(consoleGameNotificationObserver)
-try game.start()
+print("Voulez-vous continuer la dernière partie ? (O/N)")
+if let response = readLine()?.uppercased() {
+    if (response == "O") {
+        var game = try await GameFileManager.loadGame(withName: "game");
+        print(game?.board)
+        try game?.start()
+    }
+    else {
+        var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: humanPlayer)
+        let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
+        game.addObserver(consoleGameNotificationObserver, gameSavedHandler: saveMethod)
+        try game.start()
+    }
+}
+
+func saveMethod(game: Game) {
+    do {
+        try GameFileManager.saveGame(withName: "game", andGame: game);
+    }
+    catch {
+        print("Échec de la sauvegarde de Game : \(error)")
+    }
+}

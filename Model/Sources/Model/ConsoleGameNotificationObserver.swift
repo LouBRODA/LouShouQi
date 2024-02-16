@@ -64,4 +64,8 @@ public struct ConsoleGameNotificationObserver: GameNotificationObserver {
         print("**************************************")
     }
 
+    public func gameSaved(game: Game) {
+        game.gameSavedHandler?(game)
+    }
+    
 }
