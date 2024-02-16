@@ -7,13 +7,27 @@ Les consignes étant déjà toutes expliquées [ici](https://codefirst.iut.uca.f
 ---
 
 Sommaire 
- 1. [TP1](#tp1)
- 2. [TP2](#tp2)
- 3. [TP3](#tp3)
- 4. [TP4](#tp4)
- 5. [TP5](#tp5)
- 6. [TP6](#tp6)
- 7. [Auteur](#auteur)
+ 1. [Règles du jeu](#regles)
+ 2. [TP1](#tp1)
+ 3. [TP2](#tp2)
+ 4. [TP3](#tp3)
+ 5. [TP4](#tp4)
+ 6. [TP5](#tp5)
+ 7. [TP6](#tp6)
+ 8. [Auteur](#auteur)
+
+---
+
+<div id='regles'/>
+
+### Règles du jeu
+
+Les règles du jeu sont simples. Chaque joueur débute avec un nombre de pièces défini ayant chacune une force associée allant de 1 à 8. Chaque tour, un joueur se déplace d'une case et peut éliminer une pièce ayant une pièce de force inférieure à la sienne.  
+
+Il existe trois façons de remporter une partie :  
+- éliminer toutes les pièces d'un adversaire  
+- atteindre la tanière d'un adversaire  
+- obliger l'adversaire à reproduire un même mouvement plusieurs fois  
 
 ---
 
@@ -117,6 +131,8 @@ Ces classes d'extension implémentent l'interface **Codable** avec les méthodes
 ([Documentation officielle](https://developer.apple.com/documentation/swift/codable))
 
 Enfin j'ai aussi mis en place une classe **GameFileManager** qui permet de créer un fichier json ou d'en charger un pour que la Game puisse être reprise et surtout enregistrer à la fin de chaque tour de boucle de jeu.  
+
+*Le TP6 n'est pas complétement fonctionnel, il manque le choix entre début d'une nouvelle partie ou chargement d'une ancienne qui n'a pas eu le temps d'être réalisé par manque de temps.*  
 
 ---
 
