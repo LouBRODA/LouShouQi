@@ -84,6 +84,42 @@ Au delà de cette notion, j'ai aussi pu découvrir la gestion et le lancement d'
 
 ---
 
+<div id='tp4'/>
+
+### Découvertes du TP4
+
+J'ai pu maintenant passer à la mise en place des joueurs de mon jeu que l'on trouve au nombre de 3 : `RandomPlayer` : un robot stupide qui jouera à chaque fois un coup aléatoire parmi ceux possibles, `HumanPlayer` : un joueur réel qui à partir d'une méthode permet de sélectionner un déplacement et `IAPlayer` : une intelligence artificielle qui choisit le meilleur coup parmi ceux possibles *(l'IA n'est pas tout à fait fonctionnelle car beaucoup de critères ne sont pas encore pris en compte pour qu'elle prenne la meilleure décision possible)*.  
+
+La particularité de ce TP est que les classes liées aux joueurs sont désormais bien des **classes** et non plus des *struct*. Le plus pratique avec les classes est la possibilité de faire de **l'héritage**, ce qui nous sera très utile pour avoir une même structure pour tous les joueurs.  
+
+([Documentation officielle](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/classesandstructures/))
+
+---
+
+<div id='tp5'/>
+
+### Découvertes du TP5
+
+Durant ce TP, j'ai pu mettre en place un patron **Observable** afin d'isoler la partie *affichage* de la partie hors de la partie de la *boucle de jeu*. J'ai donc implémenter une classe `GameNotificationObserver` que j'instancierai dans `Game` afin de notifier à différents moments de la partie (fin du jeu, changement de joueur...).  
+
+Ce principe m'a permis de bien comprendre la dissociation des rôles de chacune des parties de mon code qui ont des responsabilités différentes.  
+
+---
+
+<div id='tp6'/>
+
+### Découvertes du TP6
+
+Pendant le dernier TP, nous avons fini cette partie du projet en mettant en place la **persistance** dans l'application. Afin de toujours isoler mon code, j'ai créé un nouveau *package* où j'ai placé les différentes *classes d'extension* de mon Model.
+
+Ces classes d'extension implémentent l'interface **Codable** avec les méthodes **encode** et **decode** qui permettent de traduire en *json* les objets créés de tout type. 
+
+([Documentation officielle](https://developer.apple.com/documentation/swift/codable))
+
+Enfin j'ai aussi mis en place une classe **GameFileManager** qui permet de créer un fichier json ou d'en charger un pour que la Game puisse être reprise et surtout enregistrer à la fin de chaque tour de boucle de jeu.  
+
+---
+
 <div id='auteur'/>
 
 ## Auteur :technologist: 
