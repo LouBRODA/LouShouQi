@@ -4,7 +4,7 @@ import Model
 //Extension permettant la persistance pour la struct Player
 extension Model.Player {
     public func decodePlayer(playerCodable: PlayerCodable) -> Player{
-        return playerCodable.getRules();
+        return playerCodable.getPlayer();
     }
     
     public func encodePlayer() throws {
@@ -50,7 +50,7 @@ public struct PlayerCodable: Codable{
         self = player
     }
     
-    public func getRules() -> Player {
+    public func getPlayer() -> Player {
         switch playerType {
         case "HumanPlayer":
             return HumanPlayer(withName: name, andId: id, andInputMethod: { _ in return Move(owner: .player1, rowOrigin: 0, columnOrigin: 0, rowDestination: 1, columnDestination: 0) })!;

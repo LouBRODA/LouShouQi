@@ -182,6 +182,19 @@ let playerCodableDecode = try jsonDecoder.decode(PlayerCodable.self, from: playe
 let playerDecode = randomPlayerTest.decodePlayer(playerCodable: playerCodableDecode)
 print(playerDecode)
 
+let humanPlayerTest: HumanPlayer = HumanPlayer(withName: "HumanPlayer", andId: .player2, andInputMethod: { _ in return Move(owner: .player1, rowOrigin: 0, columnOrigin: 0, rowDestination: 1, columnDestination: 0) })!
+
+
+/*GAME*/
+let gameTest: Game = Game(withRules: verySimpleRulesTest, andPlayer1: randomPlayerTest, andPlayer2: humanPlayerTest)
+let gameTestEncode = try jsonEncoder.encode(gameTest)
+if let gameTestEncodeString = String(data: gameTestEncode, encoding: .utf8){
+    print(gameTestEncodeString)
+}
+let gameTestDecode = try jsonDecoder.decode(Game.self, from: gameTestEncode)
+print(gameTestDecode)
+
+
 
 //VERY SIMPLE RULES - COMMAND LINE TESTS
 
