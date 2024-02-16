@@ -1,5 +1,6 @@
 import Foundation
 
+// Structure permettant de représenter une Game
 public struct Game {
     
     public var rules: any Rules
@@ -11,7 +12,13 @@ public struct Game {
     
     public var gameSavedHandler: ((Game) -> Void)?
     
-    /// Initialiseur d'une partie
+    /// Initialiseur d'une Game
+    ///
+    /// - Parameters:
+    ///   - rules: Les règles choisies pour la partie en cours.
+    ///   - player1: Joueur 1 de la partie.
+    ///   - player2: Joueur 2 de la partie.
+    /// - Returns: Void
     public init(withRules rules: any Rules, andPlayer1 player1: Player, andPlayer2 player2: Player) {
         self.rules = rules
         self.board = type(of: rules).createBoard()
@@ -19,7 +26,12 @@ public struct Game {
         self.player2 = player2
     }
     
-    //Méthodes de gestion des observers
+    /// Méthodes d'ajout des observers
+    ///
+    /// - Parameters:
+    ///   - observer: Structure d'observeurs à ajouter
+    ///   - gameSavedHandler: Méthode permettant d'enregistrer une partie
+    /// - Returns: Void
     public mutating func addObserver(_ observer: GameNotificationObserver, gameSavedHandler: ((Game) -> Void)? = nil){
         observers.append(observer)
         self.gameSavedHandler = gameSavedHandler
@@ -28,36 +40,70 @@ public struct Game {
     //mutating func removeObserver(_ observer: GameNotificationObserver)
     
     
-    // Méthodes de notification
+    /// Méthode de notification de début de partie
+    ///
+    /// - Returns: Void
     public func notifyGameStarted() {
         observers.forEach { $0.gameStarted() }
     }
 
+    /// Méthode de notification de changement de joueur
+    ///
+    /// - Returns: Void
     public func notifyPlayerNotified(player: Player) {
         observers.forEach { $0.playerNotified(player: player) }
     }
 
+    /// Méthode de notification de mouvement choisi
+    ///
+    /// - Parameters:
+    ///   - move: Dernier Move joué
+    /// - Returns: Void
     public func notifyMovePlayed(move: Move) {
         observers.forEach { $0.movePlayed(move: move) }
     }
     
+    /// Méthode de notification de mouvement invalide
+    ///
+    /// - Parameters:
+    ///   - move: Dernier Move joué
+    /// - Returns: Void
     public func notifyMoveNotValidated(move: Move?) {
         observers.forEach { $0.moveNotValidated(move: move) }
     }
 
+    /// Méthode de notification de fin de partie
+    ///
+    /// - Parameters:
+    ///   - game: Situation de la partie
+    ///   - player: Joueur ayant joué
+    /// - Returns: Void
     public func notifyGameOver(winningResult: (Bool, Result), player: Player) {
         observers.forEach { $0.gameOver(winningResult: winningResult, player: player) }
     }
 
+    /// Méthode de notification de changement de tableau
+    ///
+    /// - Parameters:
+    ///   - game: Board à changer
+    /// - Returns: Void
     public func notifyBoardChanged(board: Board) {
         observers.forEach { $0.boardChanged(board: board) }
     }
     
+    /// Méthodes de sauvegarde de partie
+    ///
+    /// - Parameters:
+    ///   - game: Game à sauvegarder
+    /// - Returns: Void
     public func notifyGameSaved(game: Game) {
         observers.forEach { $0.gameSaved(game: game) }
     }
     
     
+    /// Méthode de lancement d'une partie
+    ///
+    /// - Returns: Void
     public mutating func start() throws{
         var selectedPiece: Piece
         var winningReason: (Bool, Result) = (false, .notFinished)
