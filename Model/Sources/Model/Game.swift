@@ -9,6 +9,8 @@ public struct Game {
     
     public var observers: [GameNotificationObserver] = []
     
+    public var gameSavedHandler: ((Game) -> Void)?
+    
     /// Initialiseur d'une partie
     public init(withRules rules: any Rules, andPlayer1 player1: Player, andPlayer2 player2: Player) {
         self.rules = rules
@@ -18,8 +20,9 @@ public struct Game {
     }
     
     //Méthodes de gestion des observers
-    public mutating func addObserver(_ observer: GameNotificationObserver){
+    public mutating func addObserver(_ observer: GameNotificationObserver, gameSavedHandler: ((Game) -> Void)? = nil){
         observers.append(observer)
+        self.gameSavedHandler = gameSavedHandler
     }
     
     //mutating func removeObserver(_ observer: GameNotificationObserver)
@@ -48,6 +51,10 @@ public struct Game {
 
     public func notifyBoardChanged(board: Board) {
         observers.forEach { $0.boardChanged(board: board) }
+    }
+    
+    public func notifyGameSaved(game: Game) {
+        observers.forEach { $0.gameSaved(game: game) }
     }
     
     
@@ -104,6 +111,8 @@ public struct Game {
                 
                 winningReason = try rules.isGameOver(on: board, lastMoveRow: move.rowDestination, lastMoveColumn: move.columnDestination)
             }
+            
+            notifyGameSaved(game: self)
         }
         notifyGameOver(winningResult: winningReason, player: nextPlayer)
         notifyBoardChanged(board: board)

@@ -10,6 +10,7 @@
 		EC3C36012B4E9B5000B1A80C /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3C36002B4E9B5000B1A80C /* main.swift */; };
 		EC3C36092B4EAA0600B1A80C /* Model in Frameworks */ = {isa = PBXBuildFile; productRef = EC3C36082B4EAA0600B1A80C /* Model */; };
 		EC3C360B2B4EAA0B00B1A80C /* ExtensionsTestsCli in Frameworks */ = {isa = PBXBuildFile; productRef = EC3C360A2B4EAA0B00B1A80C /* ExtensionsTestsCli */; };
+		ECA138912B7A78E3003A1EBE /* Persistence in Frameworks */ = {isa = PBXBuildFile; productRef = ECA138902B7A78E3003A1EBE /* Persistence */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECA138912B7A78E3003A1EBE /* Persistence in Frameworks */,
 				EC3C36092B4EAA0600B1A80C /* Model in Frameworks */,
 				EC3C360B2B4EAA0B00B1A80C /* ExtensionsTestsCli in Frameworks */,
 			);
@@ -93,6 +95,7 @@
 			packageProductDependencies = (
 				EC3C36082B4EAA0600B1A80C /* Model */,
 				EC3C360A2B4EAA0B00B1A80C /* ExtensionsTestsCli */,
+				ECA138902B7A78E3003A1EBE /* Persistence */,
 			);
 			productName = BoardCommandLineToolTest;
 			productReference = EC3C35FD2B4E9B5000B1A80C /* BoardCommandLineToolTest */;
@@ -310,6 +313,10 @@
 		EC3C360A2B4EAA0B00B1A80C /* ExtensionsTestsCli */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ExtensionsTestsCli;
+		};
+		ECA138902B7A78E3003A1EBE /* Persistence */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Persistence;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

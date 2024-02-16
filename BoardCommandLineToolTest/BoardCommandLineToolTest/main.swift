@@ -1,5 +1,6 @@
 import Foundation
 import Model
+import Persistence
 import ExtensionsTestsCli
 
 //CREATION BOARD TEST
@@ -89,6 +90,111 @@ let boardState3 = startingBoard.insertPiece(piece: lionJ1StartingCell.piece!, at
 print(startingBoard.description)
 
 
+
+//PERSISTENCE - COMMAND LINE TESTS
+
+let jsonEncoder = JSONEncoder()
+let jsonDecoder = JSONDecoder()
+
+/*ANIMAL*/
+let cat = Animal.cat
+let catEncode = try jsonEncoder.encode(cat)
+if let catEncodeString = String(data: catEncode, encoding: .utf8){
+    print(catEncodeString)
+}
+let catDecode = try jsonDecoder.decode(Animal.self, from: catEncode)
+print(catDecode.rawValue)
+
+/*OWNER*/
+let player1 = Owner.player1
+let player1Encode = try jsonEncoder.encode(player1)
+if let player1EncodeString = String(data: player1Encode, encoding: .utf8){
+    print(player1EncodeString)
+}
+let player1Decode = try jsonDecoder.decode(Owner.self, from: player1Encode)
+print(player1Decode.description)
+
+/*CELLTYPE*/
+let jungle = CellType.jungle
+let jungleEncode = try jsonEncoder.encode(jungle)
+if let jungleEncodeString = String(data: jungleEncode, encoding: .utf8){
+    print(jungleEncodeString)
+}
+let jungleDecode = try jsonDecoder.decode(CellType.self, from: jungleEncode)
+print(jungleDecode)
+
+/*CELL*/
+let ratJ1StartingCellTest : Cell = Cell(cellType: .jungle, initialOwner: ratJ1.owner, piece: ratJ1)
+let ratJ1StartingCellTestEncode = try jsonEncoder.encode(ratJ1StartingCellTest)
+if let ratJ1StartingCellTestEncodeString = String(data: ratJ1StartingCellTestEncode, encoding: .utf8){
+    print(ratJ1StartingCellTestEncodeString)
+}
+let ratJ1StartingCellTestDecode = try jsonDecoder.decode(Cell.self, from: ratJ1StartingCellTestEncode)
+print(ratJ1StartingCellTestDecode)
+
+/*MOVE*/
+let moveJ1Test : Move = Move(owner: .player1, rowOrigin: 0, columnOrigin: 0, rowDestination: 0, columnDestination: 1)
+let moveJ1TestEncode = try jsonEncoder.encode(moveJ1Test)
+if let moveJ1TestEncodeString = String(data: moveJ1TestEncode, encoding: .utf8){
+    print(moveJ1TestEncodeString)
+}
+let moveJ1TestDecode = try jsonDecoder.decode(Move.self, from: moveJ1TestEncode)
+print(moveJ1TestDecode)
+
+
+/*PIECE*/
+let ratPieceTest : Piece = Piece(owner: .player1, animal: .rat)
+let ratPieceTestEncode = try jsonEncoder.encode(ratPieceTest)
+if let ratPieceTestEncodeString = String(data: ratPieceTestEncode, encoding: .utf8){
+    print(ratPieceTestEncodeString)
+}
+let ratPieceTestDecode = try jsonDecoder.decode(Piece.self, from: ratPieceTestEncode)
+print(ratPieceTestDecode)
+
+/*BOARD*/
+let boardTest : Board = VerySimpleRules.createBoard()
+let boardTestEncode = try jsonEncoder.encode(boardTest)
+if let boardTestEncodeString = String(data: boardTestEncode, encoding: .utf8){
+    print(boardTestEncodeString)
+}
+let boardTestDecode = try jsonDecoder.decode(Board.self, from: boardTestEncode)
+print(boardTestDecode)
+
+/*RULES*/
+let verySimpleRulesTest: VerySimpleRules = VerySimpleRules()
+let rulesCodable = RulesCodable(occurrences: verySimpleRulesTest.occurrences, historic: verySimpleRulesTest.historic, rulesType: "VerySimpleRules")
+let rulesCodableEncode = try jsonEncoder.encode(rulesCodable)
+if let rulesCodableEncodeString = String(data: rulesCodableEncode, encoding: .utf8){
+    print(rulesCodableEncodeString)
+}
+let rulesCodableDecode = try jsonDecoder.decode(RulesCodable.self, from: rulesCodableEncode)
+let rulesDecode = verySimpleRulesTest.decodeRules(rulesCodable: rulesCodableDecode)
+print(rulesDecode)
+
+/*PLAYER*/
+let randomPlayerTest: RandomPlayer = RandomPlayer(withName: "RandomPlayer", andId: .player1)!
+let playerCodable = PlayerCodable(id: randomPlayerTest.id, name: randomPlayerTest.name, playerType: "RandomPlayer")
+let playerCodableEncode = try jsonEncoder.encode(playerCodable)
+if let playerCodableEncodeString = String(data: playerCodableEncode, encoding: .utf8){
+    print(playerCodableEncodeString)
+}
+let playerCodableDecode = try jsonDecoder.decode(PlayerCodable.self, from: playerCodableEncode)
+let playerDecode = randomPlayerTest.decodePlayer(playerCodable: playerCodableDecode)
+print(playerDecode)
+
+let humanPlayerTest: HumanPlayer = HumanPlayer(withName: "HumanPlayer", andId: .player2, andInputMethod: { _ in return Move(owner: .player1, rowOrigin: 0, columnOrigin: 0, rowDestination: 1, columnDestination: 0) })!
+
+
+/*GAME*/
+let gameTest: Game = Game(withRules: verySimpleRulesTest, andPlayer1: randomPlayerTest, andPlayer2: humanPlayerTest)
+let gameTestEncode = try jsonEncoder.encode(gameTest)
+if let gameTestEncodeString = String(data: gameTestEncode, encoding: .utf8){
+    print(gameTestEncodeString)
+}
+let gameTestDecode = try jsonDecoder.decode(Game.self, from: gameTestEncode)
+print(gameTestDecode)
+
+//try await GameFileManager.saveGame(withName: "test", andGame: gameTest)
 
 //VERY SIMPLE RULES - COMMAND LINE TESTS
 
@@ -268,13 +374,31 @@ let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
 game.addObserver(consoleGameNotificationObserver)
 try game.start()
 */
-
-
+ 
 var verySimpleRules: VerySimpleRules = VerySimpleRules()
 let iAPlayer: IAPlayer = IAPlayer(withName: "IAPlayer", andId: .player1)!
 let humanPlayer: HumanPlayer = HumanPlayer(withName: "Lou", andId: .player2, andInputMethod: inputHumanMethod)!
 
-var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: humanPlayer)
-let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
-game.addObserver(consoleGameNotificationObserver)
-try game.start()
+print("Voulez-vous continuer la dernière partie ? (O/N)")
+if let response = readLine()?.uppercased() {
+    if (response == "O") {
+        var game = try await GameFileManager.loadGame(withName: "game");
+        print(game?.board)
+        try game?.start()
+    }
+    else {
+        var game = Game(withRules: verySimpleRules, andPlayer1: iAPlayer, andPlayer2: humanPlayer)
+        let consoleGameNotificationObserver = ConsoleGameNotificationObserver()
+        game.addObserver(consoleGameNotificationObserver, gameSavedHandler: saveMethod)
+        try game.start()
+    }
+}
+
+func saveMethod(game: Game) {
+    do {
+        try GameFileManager.saveGame(withName: "game", andGame: game);
+    }
+    catch {
+        print("Échec de la sauvegarde de Game : \(error)")
+    }
+}
