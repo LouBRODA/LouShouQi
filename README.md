@@ -10,7 +10,10 @@ Sommaire
  1. [TP1](#tp1)
  2. [TP2](#tp2)
  3. [TP3](#tp3)
- 4. [Auteur](#auteur)
+ 4. [TP4](#tp4)
+ 5. [TP5](#tp5)
+ 6. [TP6](#tp6)
+ 7. [Auteur](#auteur)
 
 ---
 
